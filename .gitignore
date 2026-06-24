@@ -1,0 +1,6 @@
+/vendor/
+/var/cache/
+/var/logs/
+*.log
+config/settings.inc.php
+app/config/parameters.php
