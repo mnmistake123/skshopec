@@ -1,0 +1,722 @@
+name: akira
+display_name: Akira
+version: 2.3.9
+author:
+  name: "AxonVip Team"
+  email: "axonvip@gmail.com"
+  url: "https://themeforest.net/user/axonviz/portfolio"
+
+meta:
+  compatibility:
+      from: 1.7.7.4
+      to: ~
+
+  available_layouts:
+    layout-full-width:
+      name: Full Width
+      description: No side columns, ideal for distraction-free pages such as product pages.
+    layout-both-columns:
+      name: Three Columns
+      description: One large central column and 2 side columns.
+    layout-left-column:
+      name: Two Columns, small left column
+      description: Two columns with a small left column
+    layout-right-column:
+      name: Two Columns, small right column
+      description: Two columns with a small right column
+
+assets:
+  # If you're using this theme as child and you want to load
+  # the parent theme assets, uncomment this line.
+#  use_parent_assets: true
+
+  # The following lines are showing how to load assets in your page
+  # Uncomment and change value to start loading css or js files
+#  css:
+#    all:
+#      - id: custom-lib-style
+#        path: assets/css/custom-lib.css
+#    product:
+#      - id: product-style
+#        path: assets/css/product.css
+#        media: all
+#        priority: 200
+#  js:
+#    cart:
+#      - id: cat-extra-lib
+#        path: assets/js/cart-lib.js
+
+
+global_settings:
+  configuration:
+    PS_IMAGE_QUALITY: png
+    BLOCK_CATEG_ROOT_CATEGORY: 0
+    PS_DISABLE_OVERRIDES: 0
+  modules:
+   to_enable:
+     - nrtthemecustomizer
+     - nrtmegamenu
+     - axoncreator
+     - nrtpopupnewsletter
+     - nrtcompare
+     - nrtwishlist
+     - nrtproductslinknav
+     - nrtaddthisbutton
+     - nrtzoom
+     - nrtvariant
+     - nrtproducttags
+     - nrtsearchbar
+     - nrtsociallogin
+     - nrtsocialbutton
+     - nrtshoppingcart
+     - nrtcustomtab
+     - nrtreviews
+     - nrtcountdown
+     - nrtsizechart
+     - nrtcookielaw
+     - nrtproductvideo
+     - nrtcaptcha
+     - nrtshippingfreeprice
+     - smartblog
+     - smartblogsearch
+     - smartblogcategories
+     - smartblogrecentposts
+     - smartblogarchive
+     - smartbloglatestcomments
+     - smartblogpopularposts
+     - smartblogtag
+   to_disable:
+     - welcome
+     - ps_linklist
+     - ps_mainmenu
+     - ps_searchbar
+     - ps_featuredproducts
+     - ps_banner
+     - ps_imageslider
+     - ps_shoppingcart
+     - ps_customtext
+     - ps_customeraccountlinks
+     - ps_themecusto
+     - ps_sharebuttons
+     - productcomments
+  hooks:
+    modules_to_hook:
+      actionAdminControllerSetMedia:
+        - dashactivity
+        - dashgoals
+        - dashtrends
+        - graphnvd3
+        - gamification
+        - psgdpr
+        - ps_mbo
+        - nrtthemecustomizer
+      actionAdminCurrenciesControllerSaveAfter:
+        - ps_currencyselector
+      actionAdminGroupsControllerSaveAfter:
+      actionAdminMetaControllerUpdate_optionsAfter:
+        - gamification
+      actionAdminPerformanceControllerSaveAfter:
+        - gamification
+      actionAdminPreferencesControllerUpdate_optionsAfter:
+        - gamification
+      actionAdminSpecificPriceRuleControllerSaveAfter:
+        - ps_facetedsearch
+      actionAdminStoresControllerSaveAfter:
+        - gamification
+      actionAdminStoresControllerUpdate_optionsAfter:
+        - ps_contactinfo
+        - gamification
+      actionAdminThemesControllerUpdate_optionsAfter:
+        - gamification
+      actionAdminWebserviceControllerSaveAfter:
+        - gamification
+      actionAfterCreateFeatureFormHandler:
+        - ps_facetedsearch
+      actionAfterUpdateFeatureFormHandler:
+        - ps_facetedsearch
+      actionAttributeGroupDelete:
+        - ps_facetedsearch
+      actionAttributeGroupSave:
+        - ps_facetedsearch
+      actionAttributePostProcess:
+        - ps_facetedsearch
+      actionAttributeSave:
+        - ps_facetedsearch
+      actionCategoryAdd:
+        - ps_facetedsearch
+        - nrtthemecustomizer
+        - nrtmegamenu
+      actionCategoryDelete:
+        - ps_facetedsearch
+        - nrtthemecustomizer
+        - nrtmegamenu
+      actionCategoryUpdate:
+        - ps_facetedsearch
+        - nrtthemecustomizer
+        - nrtmegamenu
+      actionCustomerAccountAdd:
+        - ps_emailsubscription
+        - psgdpr
+      actionCustomerAccountUpdate:
+        - ps_emailsubscription
+      actionDeleteGDPRCustomer:
+        - ps_emailsubscription
+        - psgdpr
+        - nrtwishlist
+      actionExportGDPRData:
+        - ps_emailsubscription
+        - nrtwishlist
+      actionFeatureDelete:
+        - ps_facetedsearch
+      actionFeatureFormBuilderModifier:
+        - ps_facetedsearch
+      actionFeatureSave:
+        - ps_facetedsearch
+      actionFeatureValueDelete:
+        - ps_facetedsearch
+      actionFeatureValueSave:
+        - ps_facetedsearch
+      actionFrontControllerSetMedia:
+        - ps_emailsubscription
+        - blockreassurance
+      actionModuleInstallAfter:
+        - gamification
+      actionModuleRegisterHookAfter:
+      actionModuleUnRegisterHookAfter:
+      actionObjectBlogDeleteAfter:
+        - axoncreator
+      actionObjectCarrierAddAfter:
+        - gamification
+      actionObjectCartAddAfter:
+        - gamification
+      actionObjectCartRuleAddAfter:
+        - gamification
+      actionObjectCategoryAddAfter:
+      actionObjectCategoryDeleteAfter:
+        - nrtmegamenu
+        - axoncreator
+      actionObjectCategoryUpdateAfter:
+        - nrtmegamenu
+      actionObjectCmsAddAfter:
+        - gamification
+        - nrtthemecustomizer
+      actionObjectCmsDeleteAfter:
+        - nrtthemecustomizer
+        - nrtmegamenu
+        - axoncreator
+      actionObjectCmsUpdateAfter:
+        - nrtthemecustomizer
+        - nrtmegamenu
+      actionObjectContactAddAfter:
+        - gamification
+      actionObjectCustomerAddAfter:
+        - dashactivity
+        - gamification
+      actionObjectCustomerMessageAddAfter:
+        - dashactivity
+      actionObjectCustomerThreadAddAfter:
+        - dashactivity
+        - gamification
+      actionObjectCustomerUpdateBefore:
+        - ps_emailsubscription
+      actionObjectEmployeeAddAfter:
+        - gamification
+      actionObjectImageAddAfter:
+        - gamification
+      actionObjectLanguageAddAfter:
+      actionObjectManufacturerAddAfter:
+      actionObjectManufacturerDeleteAfter:
+        - nrtmegamenu
+        - axoncreator
+      actionObjectManufacturerUpdateAfter:
+        - nrtmegamenu
+      actionObjectOrderAddAfter:
+        - dashactivity
+        - dashproducts
+        - gamification
+      actionObjectOrderReturnAddAfter:
+        - dashactivity
+      actionObjectProductAddAfter:
+        - gamification
+      actionObjectProductDeleteAfter:
+        - nrtmegamenu
+        - axoncreator
+        - nrtreviews
+      actionObjectProductUpdateAfter:
+        - nrtmegamenu
+      actionObjectShopAddAfter:
+        - gamification
+      actionObjectShopGroupAddAfter:
+        - gamification
+      actionObjectShopUpdateAfter:
+        - gamification
+      actionObjectSpecificPriceRuleUpdateBefore:
+        - ps_facetedsearch
+      actionObjectSupplierAddAfter:
+      actionObjectSupplierDeleteAfter:
+        - nrtmegamenu
+        - axoncreator
+      actionObjectSupplierUpdateAfter:
+        - nrtmegamenu
+      actionOrderStatusPostUpdate:
+        - dashtrends
+        - ps_crossselling
+      actionOrderStatusUpdate:
+        - gamification
+      actionProductAdd:
+        - nrtmegamenu
+      actionProductDelete:
+        - nrtthemecustomizer
+        - nrtmegamenu
+        - nrtwishlist
+        - nrtcustomtab
+        - nrtsizechart
+        - nrtproductvideo
+      actionProductSave:
+        - ps_facetedsearch
+        - nrtthemecustomizer
+        - nrtcustomtab
+        - nrtsizechart
+        - nrtproductvideo
+      actionProductSearchAfter:
+        - nrtthemecustomizer
+      actionProductSearchComplete:
+        - nrtthemecustomizer
+      actionProductUpdate:
+        - nrtmegamenu
+      actionsbappcomment:
+        - smartblog
+      actionsbcat:
+        - smartblog
+      actionsbdeletecat:
+        - smartblog
+        - smartblogcategories
+      actionsbdeletepost:
+        - smartblog
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartblogpopularposts
+        - smartblogtag
+      actionsbheader:
+        - smartblog
+      actionsbnewcat:
+        - smartblog
+        - smartblogcategories
+      actionsbnewpost:
+        - smartblog
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartblogpopularposts
+        - smartblogtag
+      actionsbpostcomment:
+        - smartblog
+        - smartbloglatestcomments
+      actionsbsearch:
+        - smartblog
+      actionsbsingle:
+        - smartblog
+        - smartblogpopularposts
+      actionsbtogglecat:
+        - smartblog
+        - smartblogcategories
+      actionsbtogglepost:
+        - smartblog
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartblogpopularposts
+        - smartblogtag
+      actionsbupdatecat:
+        - smartblog
+        - smartblogcategories
+      actionsbupdatepost:
+        - smartblog
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartblogpopularposts
+        - smartblogtag
+      actionSearch:
+        - dashproducts
+        - statssearch
+      actionShopDataDuplication:
+      actionSubmitAccountBefore:
+        - ps_dataprivacy
+      actionUpdateLangAfter:
+      additionalCustomerFormFields:
+        - ps_dataprivacy
+        - ps_emailsubscription
+        - psgdpr
+      addproduct:
+      addWebserviceResources:
+        - smartblog
+      AdminStatsModules:
+        - pagesnotfound
+        - statsbestcategories
+        - statsbestcustomers
+        - statsbestproducts
+        - statsbestsuppliers
+        - statsbestvouchers
+        - statscarrier
+        - statscatalog
+        - statscheckup
+        - statsforecast
+        - statsnewsletter
+        - statspersonalinfos
+        - statsproduct
+        - statsregistrations
+        - statssales
+        - statssearch
+        - statsstock
+      authentication:
+        - statsdata
+      backOfficeHeader:
+        - nrtthemecustomizer
+        - nrtproductvideo
+      categoryUpdate:
+        - nrtmegamenu
+      createAccount:
+        - statsdata
+      customhookname:
+      dashboardData:
+        - dashactivity
+        - dashgoals
+        - dashproducts
+        - dashtrends
+      dashboardZoneOne:
+        - dashactivity
+      dashboardZoneTwo:
+        - dashgoals
+        - dashproducts
+        - dashtrends
+      deleteproduct:
+      dislayMyAccountBlock:
+      display404PageBuilder:
+        - axoncreator
+      displayAdminProductsExtra:
+        - nrtthemecustomizer
+        - nrtcustomtab
+        - nrtsizechart
+        - nrtproductvideo
+      displayAfterBodyOpeningTag:
+        - blockreassurance
+      displayBackOfficeCategory:
+        - nrtthemecustomizer
+      displayBackOfficeHeader:
+        - ps_faviconnotificationbo
+        - gamification
+        - axoncreator
+        - smartblog
+        - ps_facebook
+      displayBanner:
+      displayNav1:
+      displayNav2:
+        - nrtcountdown
+      displayBeforeBodyClosingTag:
+        - statsdata
+        - nrtwishlist
+        - nrtcookielaw
+        - nrtreviews
+      displayBeforeCarrier:
+      displayBlogShareButtons:
+        - nrtsocialbutton
+      displayBodyBottom:
+        - nrtthemecustomizer
+        - nrtmegamenu
+        - nrtpopupnewsletter
+        - nrtsearchbar
+        - nrtshoppingcart
+        - axoncreator
+      displayButtonCartNbr:
+        - nrtshoppingcart
+      displayButtonCompare:
+        - nrtcompare
+      displayButtonCompareNbr:
+        - nrtcompare
+      displayButtonSearch:
+        - nrtsearchbar
+      displayButtonWishList:
+        - nrtwishlist
+      displayButtonWishListNbr:
+        - nrtwishlist
+      displayCarrierList:
+      displayContactPageBuilder:
+        - axoncreator
+      displayCountDown:
+        - nrtcountdown
+      displayCrossSellingShoppingCart:
+        - axoncreator
+      displayCustomerAccount:
+        - psgdpr
+        - nrtwishlist
+      displayNrtCaptchaContact:
+        - nrtcaptcha
+      displayCustomerAccountForm:
+        - nrtcaptcha
+      displayNrtCartInfo:
+        - nrtshippingfreeprice
+      displayCustomerAccountFormTop:
+      displayDashboardTop:
+        - ps_mbo
+      displayFollowButtons:
+        - nrtsocialbutton
+      displayFooter:
+        - axoncreator
+      displayFooterAfter:
+        - axoncreator
+      displayFooterBefore:
+        - axoncreator
+      displayFooterPageBuilder:
+        - axoncreator
+      displayFooterProduct:
+        - axoncreator
+      displayGDPRConsent:
+        - psgdpr
+      displayHeader:
+        - nrtmegamenu
+        - nrtwishlist
+        - nrtcountdown
+        - nrtcookielaw
+        - nrtproductvideo
+        - smartblog
+        - smartblogcategories
+        - smartblogarchive
+        - nrtreviews
+      displayHeaderMobileLeft:
+        - nrtmegamenu
+      displayHeaderMobileRight:
+        - nrtsearchbar
+        - nrtshoppingcart
+        - ps_customersignin
+      displayHome:
+        - axoncreator
+      displayIncludePageBuilder:
+        - axoncreator
+      displayProductSummary:
+        - axoncreator
+      displayFooterCategory:
+        - axoncreator
+      displayLeftColumn:
+        - ps_categorytree
+        - ps_facetedsearch
+        - axoncreator
+        - nrtmegamenu
+      displayLeftColumnProduct:
+        - blockreassurance
+        - axoncreator
+      displayMenuHorizontal:
+        - nrtmegamenu
+      displayMenuMobileCanVas:
+        - nrtcompare
+        - nrtwishlist
+      displayMenuVertical:
+        - nrtmegamenu
+      displayMyAccountBlock:
+      displayMyAccountBlockfooter:
+      displayMyAccountCanVas:
+        - nrtcompare
+        - nrtwishlist
+      displayNavFullWidth:
+        - axoncreator
+      displayOrderConfirmation:
+      displayOrderConfirmation2:
+        - axoncreator
+      displayPaymentReturn:
+      displayPaymentTop:
+      displayProductAccessories:
+        - axoncreator
+      displayProductAdditionalInfo:
+      displayProductButtons:
+      displayProductExtraComparison:
+        - nrtreviews
+      displayProductExtraContent:
+        - nrtcustomtab
+        - nrtreviews
+      displayProductListReviews:
+        - nrtreviews
+      displayProductRating:
+        - nrtreviews
+      displayProductSameCategory:
+        - axoncreator
+      displayProductShareButtons:
+        - nrtsocialbutton
+      displayProductSizeGuide:
+        - nrtsizechart
+      displayProductsLinkNav:
+        - nrtproductslinknav
+      displayProductTags:
+        - nrtproducttags
+      displayProductVideoBtn:
+        - nrtproductvideo
+      displayReassurance:
+        - blockreassurance
+      displayRevSlider:
+      displayRightColumn:
+        - ps_categorytree
+        - ps_facetedsearch
+        - axoncreator
+        - nrtmegamenu
+      displayRightColumnProduct:
+        - blockreassurance
+        - axoncreator
+      displaySearch:
+        - nrtsearchbar
+      displayShoppingCart:
+      displayShoppingCartFooter:
+        - axoncreator
+      displaySmartBlogLeft:
+        - smartblogsearch
+        - smartblogcategories
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartbloglatestcomments
+        - smartblogpopularposts
+        - smartblogtag
+      displaySmartBlogRight:
+        - smartblogsearch
+        - smartblogcategories
+        - smartblogrecentposts
+        - smartblogarchive
+        - smartbloglatestcomments
+        - smartblogpopularposts
+        - smartblogtag
+      displaySocialLogin:
+        - nrtsociallogin
+      displayTop:
+      displayTopColumn:
+      displayVariant:
+        - nrtvariant
+      displayWishListShareButtons:
+        - nrtaddthisbutton
+      overrideLayoutTemplate:
+        - axoncreator
+      filterBlogContent:
+        - axoncreator
+      filterCategoryContent:
+        - axoncreator
+      filterCmsContent:
+        - axoncreator
+      filterManufacturerContent:
+        - axoncreator
+      filterProductContent:
+        - axoncreator
+      filterProductSearch:
+        - nrtthemecustomizer
+      filterSupplierContent:
+        - axoncreator
+      GraphEngine:
+        - graphnvd3
+      GridEngine:
+        - gridhtml
+      header:
+        - nrtthemecustomizer
+        - axoncreator
+        - nrtpopupnewsletter
+        - nrtcompare
+        - nrtproductslinknav
+        - nrtzoom
+        - nrtvariant
+        - nrtsearchbar
+        - nrtsociallogin
+        - nrtsocialbutton
+        - nrtshoppingcart
+        - nrtsizechart
+        - nrtcaptcha
+      moduleRoutes:
+        - smartblog
+      newOrder:
+        - gamification
+      paymentOptions:
+        - ps_checkpayment
+        - ps_wirepayment
+      paymentReturn:
+        - ps_checkpayment
+        - ps_wirepayment
+      productSearchProvider:
+        - ps_facetedsearch
+        - nrtthemecustomizer
+        - nrtsearchbar
+      registerGDPRConsent:
+        - contactform
+        - ps_emailsubscription
+        - psgdpr
+        - nrtpopupnewsletter
+        - nrtwishlist
+      top:
+        - pagesnotfound
+      updateproduct:
+  image_types:
+    cart_default:
+      width: 125
+      height: 155
+      scope: [products]
+    small_default:
+      width: 190
+      height: 236
+      scope: [products, categories, manufacturers, suppliers]
+    medium_default:
+      width: 600
+      height: 745
+      scope: [products, manufacturers, suppliers]
+    home_default:
+      width: 390
+      height: 484
+      scope: [products]
+    large_default:
+      width: 700
+      height: 869
+      scope: [products, manufacturers, suppliers]
+    category_default:
+      width: 1920
+      height: 400
+      scope: [categories]
+    category_boxed:
+      width: 870
+      height: 240
+      scope: [categories]
+    stores_default:
+      width: 170
+      height: 115
+      scope: [stores]
+    square_cart_default:
+      width: 125
+      height: 125
+      scope: [products]
+    square_small_default:
+      width: 190
+      height: 190
+      scope: [products]
+    square_medium_default:
+      width: 600
+      height: 600
+      scope: [products]
+    square_home_default:
+      width: 390
+      height: 390
+      scope: [products]
+    square_large_default:
+      width: 700
+      height: 700
+      scope: [products]
+    rectangular_cart_default:
+      width: 126
+      height: 84
+      scope: [products]
+    rectangular_small_default:
+      width: 192
+      height: 128
+      scope: [products]
+    rectangular_medium_default:
+      width: 600
+      height: 400
+      scope: [products]
+    rectangular_home_default:
+      width: 390
+      height: 260
+      scope: [products]
+    rectangular_large_default:
+      width: 696
+      height: 464
+      scope: [products]
+theme_settings:
+  default_layout: layout-full-width
+  layouts:
+    module-smartblog-details: layout-right-column

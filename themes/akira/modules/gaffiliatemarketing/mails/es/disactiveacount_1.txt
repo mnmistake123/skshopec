@@ -1,0 +1,22 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado  {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Su cuenta de referencia se ha desactivado debido a una actividad no válida. 
+                        
+                    
+                            Gracias
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

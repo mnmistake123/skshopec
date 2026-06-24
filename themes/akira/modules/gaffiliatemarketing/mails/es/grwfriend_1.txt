@@ -1,0 +1,51 @@
+            
+                 
+                        
+                                    
+                                        
+                                
+                            
+                        
+                    ¡Has desbloqueado una recompensa!
+                
+                 
+                        
+                    Felicitaciones, te has ganado la recompensa
+                    {reward_name}
+                    
+                
+                 
+                        
+                            
+                            
+                                        
+                                                    
+                                                        
+                                                            {reward_code}
+                                                        
+                                                    
+                                                    
+                                                    
+                                                
+                                    
+                            
+                         
+                        
+                    
+                                
+                                            
+                                                Usa tu recompensa
+                                            
+                                        
+                                        
+                            
+                 
+                        
+                    
+                            {shop_name}
+                            
+                
+                 
+                        
+            
+        

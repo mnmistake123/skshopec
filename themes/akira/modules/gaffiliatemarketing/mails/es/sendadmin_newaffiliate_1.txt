@@ -1,0 +1,22 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Hola ADMIN !
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            El compañero  {affiliate_lname}  se ha unido a su programa de afiliados.
+                        
+                    
+                            Atentamente.
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

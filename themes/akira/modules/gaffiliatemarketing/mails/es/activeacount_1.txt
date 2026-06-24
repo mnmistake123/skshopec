@@ -1,0 +1,22 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Su cuenta ha sido activada para referidos. Ahora puede compartir enlaces de referencia y ganar comisiones sobre las ventas.
+                        
+                    
+                            Gracias
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

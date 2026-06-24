@@ -1,0 +1,35 @@
+            
+                 
+                        
+                                    
+                                        
+                                
+                            
+                        
+                    ¡Date prisa, tus puntos vencerán pronto!
+                
+                 
+                        
+                    Usa tus puntos {points_number} {reward_points_branding} antes de que expire el {reward_expiry_date}
+                    
+                
+                 
+                        
+                    
+                                
+                                            
+                                                Usa tus puntos
+                                            
+                                        
+                                        
+                            
+                 
+                        
+                    
+                            {shop_name}
+                            
+                
+                 
+                        
+            
+        

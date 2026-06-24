@@ -1,0 +1,28 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Su pago ha sido procesado
+                        
+                    
+                            MONTO: {amount} 
+                        
+                    
+                            Más detalles están disponibles en su página. 
+                        
+                    
+                            Gracias
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

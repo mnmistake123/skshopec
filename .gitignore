@@ -1,6 +1,65 @@
-/vendor/
-/var/cache/
-/var/logs/
-*.log
+# PrestaShop sensitive config
 config/settings.inc.php
+config/settings_test.inc.php
 app/config/parameters.php
+app/config/parameters_test.php
+
+# Cache & logs
+var/cache/
+var/logs/
+var/sessions/
+*.log
+
+# Dependencies
+vendor/
+node_modules/
+
+# PrestaShop auto-generated
+img/tmp/
+img/thumbs/
+download/
+upload/
+
+# Admin folder (security - don't expose name)
+admin*/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# PrestaShop override cache
+cache/class_index.php
+cache/autoload/
+
+# Translations cache
+translations/cache/
+
+# Smarty compiled templates
+themes/*/cache/
+themes/*/compiled/
+
+# Mails override (optional, keep if you customized)
+# mails/
+
+# Backup files
+*.bak
+*.sql
+*.zip
+*.tar.gz
+
+# PHP error files
+php_errors.log
+error_log
+EOF

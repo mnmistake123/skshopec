@@ -1,0 +1,33 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Tus ventas han sido rechazadas
+                        
+                    
+                            Número de orden
+                                        Monto
+                                        Comisión
+                                    {order_number}
+                                        {order_value}
+                                        {affiliate_commission}
+                                    
+                    
+                            Más detalles están disponibles en su página. 
+                        
+                    
+                            Gracias
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

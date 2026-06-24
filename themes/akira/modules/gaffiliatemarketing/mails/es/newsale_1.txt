@@ -1,0 +1,35 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado  {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Ha realizado una nueva venta por recomendación: 
+                        
+                    
+                            Número de orden
+                                        Monto
+                                        Comisión
+                                    {order_number}
+                                        {order_value}
+                                        {affiliate_commission}
+                                    
+                    
+                            Más detalles están disponibles en su página. 
+                        
+                    
+                            Gracias. 
+                        
+                    
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

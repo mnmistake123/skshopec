@@ -1,0 +1,28 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Estimado {affiliate_lname}!
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Un nuevo afiliado acaba de registrarse con usted.
+                        
+                    
+                            {sub_lname} 
+                        
+                    
+                            {sub_email} 
+                        
+                    
+                            Gracias
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

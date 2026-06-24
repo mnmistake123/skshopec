@@ -1,0 +1,18 @@
+ 
+
+Te lo ganaste ! {reward_name}
+
+
+
+¡Buen trabajo! Tú {reward_action_completed} y ganado {reward_name}
+
+
+
+
+ Ganar mas {reward_name} 
+
+
+
+
+
+

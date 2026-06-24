@@ -1,0 +1,265 @@
+:root {	
+	--color-body: rgba(255, 255, 255, 0.8);
+	--color-label: rgba(255, 255, 255, 1);
+	--color-title: rgba(255, 255, 255, 1);
+	--color-semi: rgba(255, 255, 255, 1);
+	--color-price: rgba(255, 255, 255, 1);
+	--color-a: rgba(255, 255, 255, 0.9);
+	--color-a-hover: rgba(255, 255, 255, 1);
+	
+	--color-primary: #1367ef;	
+	--color-secondary: #1367ef;
+	--color-btn: #ffffff;
+	--color-btn-hover: #ffffff;
+	--bg-color-btn: #1367ef;
+	--bg-color-btn-hover: #1367ef;
+	
+	--bg-color-label-new: #50c646;
+	--bg-color-label-sale: #ff7380;
+		
+	--ax-form-bi-width: 1px;
+	--ax-form-bi-rd: 0;
+	--ax-form-bi-color: rgba(255, 255, 255, 0.2);
+	
+	--ax-form-btn-width: 1px;
+	--ax-form-btn-rd: 0;
+	
+	--ax-line-color: rgba(255, 255, 255, 0.15);
+	
+	--ax-bg-wrapper: rgba(255, 255, 255, 0);
+}
+
+main {
+	background-color: #1a1a1a;
+}
+
+.canvas-widget-top .title-canvas-widget {
+    color: var(--color-title);
+}
+
+.canvas-widget, .axps-products-nav .product-short, .page-title, .modal-dialog {
+	background-color: #101010;
+}
+
+#canvas-mini-cart .card-block-bottom {
+    background: #000000;
+}
+
+.canvas-widget-backdrop.open-canvas, .modal-backdrop.in {
+    opacity: 0.8;
+}
+
+.ax-cart-summary {
+    border-color: var(--ax-line-color);
+}
+
+.btn-outline-primary-r {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-outline-primary-r.active, .btn-outline-primary-r.focus, .btn-outline-primary-r:active, .btn-outline-primary-r:focus, .btn-outline-primary-r:hover {
+    color: #000000;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.definition-list dl dd, .definition-list dl dt {
+    background: rgba(0,0,0,0.5);
+}
+
+.definition-list dl dd:nth-of-type(2n), .definition-list dl dt:nth-of-type(2n) {
+    background: rgba(0,0,0,0.2);
+}
+
+select option {
+    background-color: #101010;
+}
+
+.psgdprinfo17 {
+	background-color: #101010;
+}
+
+.gr-list-gird a:hover, .gr-list-gird a.active-view {
+    fill: #ffffff;
+}
+
+.summary-container .countdown-timer > span {
+    background-color: #101010;
+}
+
+.pagination > a:focus, .pagination > a:hover {
+    background-color: #101010;
+    color: var(--color-a);
+}
+
+#back-top {
+    background-color: rgba(0, 0, 0, 0.9);
+    color: #fff;
+}
+
+#toast-container .toast {
+	background-color: #101010;
+}
+
+.toast-message h4 {
+    background: #000000;
+}
+
+.dropdown-menu, .axps-dropdown-menu {
+	background-color: #101010;
+}
+
+.dropdown-menu > a, .axps-dropdown-menu > a {
+    color: #ffffff;
+    fill: #ffffff;
+}
+
+.dropdown-menu > a:hover, .dropdown-menu > a.selected, .dropdown-menu > a.current, .axps-dropdown-menu > a:hover, .axps-dropdown-menu > a.selected {
+    background: #000000;
+    color: #ffffff;
+    fill: #ffffff;
+}
+
+.dropdown-menu > a.selected, .dropdown-menu > a.current {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+}
+
+.corlor-tooltip{
+	background:#101010;
+}
+
+.corlor-tooltip::before{
+	background: #101010;
+}
+
+.wrapper-compare-table .compare-row:nth-child(2n) .compare-col {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+#moda_popupnewsletter.popup-text-color-dark .modal-dialog {
+	background-color: #101010;
+}
+
+.blog-type-4 .element-bottom, .blog-type-7 .element-bottom {
+    background: #101010;
+}
+
+.wrapper-menu-horizontal .nrtmenu_multi_level li a {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-horizontal .nrtmenu_multi_level ul {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-vertical .nrtmenu_multi_level li a {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-vertical .nrtmenu_multi_level ul {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-column .col_element_li_depth_0, .wrapper-menu-column .col_sub_li {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-column .col_element_li_depth_0, .col_sub_li {
+	border-color: var(--ax-line-color);	
+}
+
+.wrapper-menu-horizontal .menu_sub, .wrapper-menu-horizontal .nrtmenu_multi_level ul, .wrapper-menu-horizontal .element_ul_depth_2 .granditem_0 > ul, .wrapper-menu-vertical .menu_sub, .wrapper-menu-vertical .nrtmenu_multi_level ul, .wrapper-menu-vertical .element_ul_depth_2 .granditem_0 > ul, .menu-vertical {
+    background: #101010;
+}
+
+.menu-vertical .item-level-0:hover > a {
+    background-color: #000000;
+}
+
+.category-dropdown .list-wrapper {
+    background: #101010;
+}
+
+.category-dropdown ul li.active-item > a, .category-dropdown ul li a:focus, .category-dropdown ul li a:hover {
+    background: #000000;
+}
+
+.search-results {
+    background: #101010;
+}
+
+.search-wrapper .autocomplete-suggestion.search-divider, .search-wrapper .view-all-results {
+    background-color: #000000;
+}
+
+.search-wrapper .autocomplete-suggestion:hover, .search-wrapper .view-all-results:hover {
+    background-color: #000000;
+}
+
+#header-sticky {
+    background: #101010;
+}
+
+.product-type-3 .item-inner .buttons-action {
+    background: #101010;
+}
+
+.product-type-4 .item-inner .buttons-action {
+    background: #101010;
+}
+
+.product-type-6 .item-inner .element-bottom {
+    background: #101010;
+}
+
+.product-type-6 .item-inner .buttons-action {
+    background: #101010;
+}
+
+.product-type-7 .item-inner .buttons-action {
+    background: #101010;
+}
+
+.product-type-5 .item-inner .buttons-action {
+    background: #101010;
+}
+
+#facets_search_middle_dropdown #search_filters .widget-title {
+    background-color: #101010;
+}
+
+#facets_search_middle_dropdown .facet-wrapper-content {
+    background-color: #000000;
+}
+
+.btn-secondary, .btn-secondary.disabled, .btn-secondary:disabled, .btn-secondary.disabled:hover {
+    background: #101010;
+    border-color: #101010;
+}
+
+.btn-secondary.focus, .btn-secondary:focus, .btn-secondary:hover, .btn-secondary:active:focus {
+    background: #000000;
+    border-color: #000000;
+}
+
+table.axps_shop_attributes tr:nth-of-type(2n+1) {
+    background: #101010;
+}
+
+#active-search-filters ul li a:not(.filter-block-all):not(:hover) {
+    color: #fff;
+    background: #101010;
+}
+
+.product-type-8 .item .item-inner::before {
+    background-color: #000000;
+    box-shadow: 0 0 10px rgba(255,255,255,.15);
+}
+
+.product-type-8 .item-inner .variant-links-list::before {
+    background-color: #000000;
+    box-shadow: 0 5px 5px 0 rgba(255,255,255,.15);
+}

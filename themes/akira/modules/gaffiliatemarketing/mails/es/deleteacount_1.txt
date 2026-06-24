@@ -1,0 +1,21 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Hola !
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Su cuenta de afiliado y todos sus datos han sido eliminados permanentemente de nuestro programa de afiliados.
+                        
+                    
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

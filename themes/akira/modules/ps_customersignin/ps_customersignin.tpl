@@ -1,0 +1,1 @@
+<a class="btn-canvas btn-canvas-account" href="javascript:void(0)" data-toggle="canvas-widget" data-target="#canvas-my-account" title="{l s='My Account' d='Shop.Theme.Axon'}" data-title-mobile="{l s='My Account' d='Shop.Theme.Axon'}"><i class="las la-user"></i><span class="btn-canvas-text">{l s='My Account' d='Shop.Theme.Axon'}</span></a>

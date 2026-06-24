@@ -1,0 +1,22 @@
+        
+            
+                            
+                            
+                            {brand_name}
+                            
+                            Hola ADMIN !
+                        
+                    
+                            Tema: {subject}
+                        
+                    
+                            Una nueva venta por recomendación. {affiliate_lname}  Ir  orden comprobar la información
+                        
+                    
+                            Atentamente.
+                        
+                    
+                            {brand_name}
+                        
+                    
+    

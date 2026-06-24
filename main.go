@@ -39,12 +39,14 @@ func GenerateEmbedURL(videoID, securityKey string, expiresIn time.Duration) stri
 	)
 }
 
+// https://iframe.mediadelivery.net/embed/689912/9080cf5e-f778-4b22-89b7-80d44b686dc4?token=%s&expires=%d
+// https://player.mediadelivery.net/play/689912/9080cf5e-f778-4b22-89b7-80d44b686dc4?token=%s&expires=%d
 // https://vz-ec08e264-086.b-cdn.net/9080cf5e-f778-4b22-89b7-80d44b686dc4/playlist.m3u8
 
 func main() {
 	// --- Replace these with your actual values ---
 	securityKey := "9b53ec7f-ddd0-4668-86f6-9fd8ccbacdee" // Bunny Stream Library → Security → Token Auth Key
-	// libraryID   := "689912"                      // Your Stream Library ID
+	// libraryID   := "689912"                      // Your Stream Library ID 
 	videoID     := "9080cf5e-f778-4b22-89b7-80d44b686dc4" // Your video GUID
 
 	// Generate a URL valid for 2 hours

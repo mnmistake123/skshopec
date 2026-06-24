@@ -1,0 +1,69 @@
+.faceted-overlay {
+	display: none !important;
+}
+
+#search_filters .facet .faceted-slider label {
+	display: block;
+	margin: 0;
+	color: inherit;
+}
+
+#search_filters .facet .ui-widget-content {
+    border-radius: 0;
+    height: 20px;
+    position: relative;
+    border: none;
+	margin-right: 4px;
+    margin-bottom: 0;
+    background: none;
+	cursor: pointer;
+}
+
+#search_filters .facet .ui-widget-content::before {
+    content: '';
+    background: #E7E7E7;
+    border-radius: 0;
+    position: absolute;
+    left: 0;
+    right: -4px;
+    top: 50%;
+    height: 2px;
+    margin-top: -1px;
+}
+
+#search_filters .ui-slider .ui-slider-handle {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: -15px;
+    margin-left: -13px;
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: none;
+    border-radius: 0;
+    background: none;
+    background-color: transparent !important;
+    cursor: ew-resize;
+}
+
+#search_filters .ui-slider .ui-slider-handle::after {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 15px;
+    background-color: var(--color-primary);
+}
+
+#search_filters .facet .ui-widget-header {
+    background: var(--color-primary);
+    position: absolute;
+    top: 50%;
+    border-radius: 0;
+    height: 2px;
+    margin-top: -1px;
+}

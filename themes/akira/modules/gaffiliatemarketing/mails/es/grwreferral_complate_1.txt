@@ -1,0 +1,59 @@
+            
+                 
+                        
+                                    
+                                        
+                                
+                            
+                        
+                    ¡Tu amigo usó tu recomendación!
+                
+                 
+                        
+                    {reward_friend_email}aceptó su recomendación. Ha ganado la recompensa
+                    {reward_name}
+                    
+                
+                 
+                        
+                            
+                            
+                                        
+                                                    
+                                                        
+                                                            {reward_code}
+                                                        
+                                                    
+                                                    
+                                                    
+                                                
+                                    
+                            
+                         
+                        
+                    
+                                
+                                            
+                                                Usa tu recompensa
+                                            
+                                        
+                                        
+                            
+                 
+                        
+                    ¡Gracias por ser un fiel defensor de la marca!
+                    
+                        
+                            {shop_name}
+                            
+                    
+                
+                
+                    
+                            {shop_name}
+                            
+                
+                 
+                        
+            
+        

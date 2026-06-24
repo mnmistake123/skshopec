@@ -1,0 +1,50 @@
+            
+                 
+                        
+                                    
+                                        
+                                
+                            
+                        
+                    ¡Date prisa, tu recompensa vencerá pronto!
+                
+                 
+                        
+                    Usa tu recompensa {reward_name} antes de que expire el {reward_expiry_date}
+                    
+                
+                 
+                        
+                            
+                            
+                                        
+                                                    
+                                                        
+                                                            {reward_code}
+                                                        
+                                                    
+                                                    
+                                                    
+                                                
+                                    
+                            
+                         
+                        
+                    
+                                
+                                            
+                                                Usa tu recompensa
+                                            
+                                        
+                                        
+                            
+                 
+                        
+                    
+                            {shop_name}
+                            
+                
+                 
+                        
+            
+        

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+    <name>datafast</name>
+    <displayName><![CDATA[Datafast]]></displayName>
+    <version><![CDATA[2.0.6]]></version>
+    <description><![CDATA[Pagar usando Datafast]]></description>
+    <author><![CDATA[dataTest]]></author>
+    <tab><![CDATA[payments_gateways]]></tab>
+    <is_configurable>1</is_configurable>
+    <need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
