@@ -13,18 +13,22 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
 
         // 1. Must be logged in
         if (!$this->context->customer->isLogged()) {
-            Tools::redirect('index.php?controller=authentication&back=' . urlencode($_SERVER['REQUEST_URI']));
+            $loginUrl = Context::getContext()->link->getPageLink('authentication');
+            Tools::redirect($loginUrl . '?back=' . urlencode($_SERVER['REQUEST_URI']));
+            // Tools::redirect('index.php?controller=authentication&back=' . urlencode($_SERVER['REQUEST_URI']));
         }
 
         // 2. Product must exist in videoMap
         $videoMap = $this->module->getVideoMap();
         if (!isset($videoMap[$productId])) {
-            Tools::redirect('index.php?controller=404');
+            Tools::redirect(Context::getContext()->link->getPageLink('pagenotfound'));
+            // Tools::redirect('index.php?controller=404');
         }
 
         // 3. Customer must have purchased this product
         if (!$this->customerHasPurchased($productId)) {
-            Tools::redirect('index.php?controller=product&id_product=' . $productId);
+            Tools::redirect($link->getProductLink($productId));
+            // Tools::redirect('index.php?controller=product&id_product=' . $productId);
         }
 
         // 4. Generate fresh signed Bunny URL
