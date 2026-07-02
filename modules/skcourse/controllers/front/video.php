@@ -9,13 +9,14 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
-        $productId = (int)Tools::getValue('id_product');
+        $productId = (int)Tools::getValue('id_product');    
+        $link = Context::getContext()->link;
 
         // 1. Must be logged in
         if (!$this->context->customer->isLogged()) {
-            $loginUrl = Context::getContext()->link->getPageLink('authentication');
-            Tools::redirect($loginUrl . '?back=' . urlencode($_SERVER['REQUEST_URI']));
-            // Tools::redirect('index.php?controller=authentication&back=' . urlencode($_SERVER['REQUEST_URI']));
+            $currentUrl = 'https://' . Tools::getShopDomainSsl() . $_SERVER['REQUEST_URI'];
+            $back = urlencode($currentUrl);
+            Tools::redirect($link->getPageLink('authentication', true, null, ['back' => $back]));
         }
 
         // 2. Product must exist in videoMap
@@ -27,7 +28,8 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
 
         // 3. Customer must have purchased this product
         if (!$this->customerHasPurchased($productId)) {
-            Tools::redirect($link->getProductLink($productId));
+            // Tools::redirect($link->getProductLink($productId));
+            Tools::redirect($link->getPageLink('product', true, null, ['id_product' => $productId]));
             // Tools::redirect('index.php?controller=product&id_product=' . $productId);
         }
 
