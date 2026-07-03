@@ -3895,6 +3895,36 @@ class NrtMegaMenu extends Module implements WidgetInterface
                 if(!$this->getLink($v))
                     continue;
 
+                // ← ADD THIS BLOCK HERE
+                if (trim($v['custom_class']) === 'dynamic-courses') {
+                    $purchased = NrtMegaMenuClass::getPurchasedCourses();
+                    if (!empty($purchased)) {
+                        // Build a fake column with purchased courses as custom links
+                        $fakeCol = ['children' => []];
+                        foreach ($purchased as $course) {
+                            $fakeCol['children'][] = [
+                                'item_t'  => 4,  // custom link type
+                                'm_link'  => $course['link'],
+                                'm_name'  => $course['title'],
+                                'm_title' => $course['title'],
+                                'm_icon'  => null,
+                                'icon_class' => null,
+                                'cate_label' => null,
+                                'nofollow'   => 0,
+                                'new_window' => 0,
+                                'hide_on_mobile' => 0,
+                                'custom_class'   => '',
+                                'alignment'      => 0,
+                                'id_nrt_mega_menu' => 0,
+                                'active' => 1,
+                            ];
+                        }
+                        $v['column'][] = $fakeCol;
+                    }
+                    continue; // skip normal column processing for this item
+                }
+                // ← END OF ADDED BLOCK
+
                 foreach ($columns as $col) 
                 {
                     $jon = NrtMegaMenuClass::getByColumnId($col['id_nrt_mega_column'], $this->context->language->id, 1, 0, 0);

@@ -211,9 +211,9 @@ class NrtMegaMenuClass extends ObjectModel
     public static function recurseTree($id_parent,$max_depth=2,$current_depth=0,$active=0,$id_lang = null,$item_t=0)
     {
         $id_lang = is_null($id_lang) ? Context::getContext()->language->id : (int)$id_lang;
-
-		if (!(int)$id_lang)
-			$id_lang = _USER_ID_LANG_;
+    
+        if (!(int)$id_lang)
+            $id_lang = _USER_ID_LANG_;
         $tree = self::getSub($id_parent,$active,$id_lang,$item_t);
         if ( ( $max_depth==0 || ($current_depth+1 < $max_depth) ) && $tree && count($tree))
             foreach($tree as &$v)
@@ -221,21 +221,8 @@ class NrtMegaMenuClass extends ObjectModel
                 $jon = self::recurseTree($v['id_nrt_mega_menu'],$max_depth,$current_depth+1,$active,$id_lang,$item_t);
                 if(is_array($jon) && count($jon))
                     $v['children'] = $jon;
-
-                // Dynamic purchased courses
-                // if ($v['custom_class'] === 'dynamic-courses') {
-                //     dump($v);
-                //     die('ad');
-                // }
-                // DEBUG - dump all custom classes
-                if (!empty($v['custom_class'])) {
-                    die('Found custom_class: [' . $v['custom_class'] . ']');
-                }
-                // if ($v['custom_class'] === 'dynamic-courses') {
-                //     $v['children'] = self::getPurchasedCourses();
-                // }
             }
-
+    
         return $tree;
     }
     public static function getTypes()
@@ -264,7 +251,7 @@ class NrtMegaMenuClass extends ObjectModel
         else
             return $id_nrt_mega_menu;
     }
-    private static function getPurchasedCourses()
+    public static function getPurchasedCourses()
     {
         $context = Context::getContext();
 
