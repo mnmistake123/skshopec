@@ -251,22 +251,20 @@ class NrtMegaMenuClass extends ObjectModel
         else
             return $id_nrt_mega_menu;
     }
+    //ADDED BY RAUL 
     public static function getPurchasedCourses()
     {
         $context = Context::getContext();
-
+    
         if (!$context->customer->isLogged()) {
             return [];
         }
-
+    
+        // Only show these product IDs as courses
+        $courseProductIds = [1100];
+    
         $query = new DbQuery();
-
-        $query->select('
-            DISTINCT
-            p.id_product,
-            pl.name
-        ');
-
+        $query->select('DISTINCT p.id_product, pl.name');
         $query->from('orders', 'o');
         $query->innerJoin('order_detail', 'od', 'od.id_order = o.id_order');
         $query->innerJoin('product', 'p', 'p.id_product = od.product_id');
@@ -274,27 +272,27 @@ class NrtMegaMenuClass extends ObjectModel
             'product_lang',
             'pl',
             'pl.id_product = p.id_product
-            AND pl.id_lang = '.(int)$context->language->id
+            AND pl.id_lang = ' . (int)$context->language->id
         );
-
-        $query->where('o.id_customer = '.(int)$context->customer->id);
-        $query->where('o.current_state = 2');
-
+        $query->where('o.id_customer = ' . (int)$context->customer->id);
+        $query->where('o.current_state IN (2, 5)');
+        $query->where('o.id_shop = ' . (int)$context->shop->id);
+        $query->where('od.product_id IN (' . implode(',', array_map('intval', $courseProductIds)) . ')');
+    
         $courses = Db::getInstance()->executeS($query);
-
+    
         $items = [];
-
         foreach ($courses as $course) {
-
             $items[] = [
                 'title' => $course['name'],
-                'link' => $context->link->getBaseLink() . 'ver-curso/' . (int)$course['id_product'],
+                'link'  => rtrim($context->link->getBaseLink(), '/') . '/ver-curso/' . (int)$course['id_product'],
                 'children' => [],
             ];
         }
-
+    
         return $items;
     }
+    //ADDED BY RAUL 
     public static function getSecondaryParent($id_nrt_mega_menu)
     {
         $menu = new NrtMegaMenuClass($id_nrt_mega_menu);
