@@ -9,7 +9,8 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
-        $productId = (int)Tools::getValue('id_product');    
+        $productId = (int)Tools::getValue('id_product');
+        $customerId = (int)$this->context->customer->id;
         $link = Context::getContext()->link;
 
         // 1. Must be logged in
@@ -26,20 +27,54 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
             // Tools::redirect('index.php?controller=404');
         }
 
-        // 3. Customer must have purchased this product
-        if (!$this->customerHasPurchased($productId)) {
-            // Tools::redirect($link->getProductLink($productId));
-            Tools::redirect($link->getPageLink('product', true, null, ['id_product' => $productId]));
-            // Tools::redirect('index.php?controller=product&id_product=' . $productId);
+        // 3. Get order date for this purchase
+        $query = new DbQuery();
+        $query->select('o.date_add')
+            ->from('order_detail', 'od')
+            ->innerJoin('orders', 'o', 'o.id_order = od.id_order')
+            ->where('o.id_customer = ' . $customerId)
+            ->where('od.product_id = ' . $productId)
+            ->where('o.current_state = 2')
+            // ->orderBy('o.date_add', 'DESC');
+            ->orderBy('o.date_add DESC'); 
+            // ->limit(1);
+
+        $orderDate = Db::getInstance()->getValue($query);
+
+        // 4. Not purchased
+        if (!$orderDate) {
+            Tools::redirect($link->getProductLink($productId));
+        }
+        // // 3. Customer must have purchased this product
+        // if (!$this->customerHasPurchased($productId)) {
+        //     // Tools::redirect($link->getProductLink($productId));
+        //     Tools::redirect($link->getPageLink('product', true, null, ['id_product' => $productId]));
+        //     // Tools::redirect('index.php?controller=product&id_product=' . $productId);
+        // }
+
+        // 5. Check if access has expired
+        $expiration = strtotime($orderDate) + ($this->module->getTokenExpirySeconds());
+
+        if (time() > $expiration) {
+            // Show expired message instead of redirecting
+            $this->context->smarty->assign([
+                'product_id'  => $productId,
+                'expired'     => true,
+                'expires_at'  => date('d/m/Y H:i', $expiration),
+            ]);
+            $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
+            return;
         }
 
-        // 4. Generate fresh signed Bunny URL
-        $videoUrl = $this->module->generateBunnyURL($videoMap[$productId]);
+        // 6. Generate signed URL with fixed expiration
+        $videoUrl = $this->module->generateBunnyURLWithExpiry($videoMap[$productId], $expiration);
 
-        // 5. Pass to template
+        // 7. Pass to template
         $this->context->smarty->assign([
-            'video_url'  => $videoUrl,
-            'product_id' => $productId,
+            'video_url'   => $videoUrl,
+            'product_id'  => $productId,
+            'expired'     => false,
+            'expires_at'  => date('d/m/Y H:i', $expiration),
         ]);
 
         $this->setTemplate('module:skcourse/views/templates/front/video.tpl');

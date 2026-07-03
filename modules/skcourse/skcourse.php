@@ -5,15 +5,16 @@ if (!defined('_PS_VERSION_')) {
 
 class Skcourse extends Module
 {
+    private $bunnyCDNHost = 'sk-shop-pull-zone.b-cdn.net';
+    // private $bunnyCDNHost = 'video.skshop.com.ec';
     // Map product IDs to Bunny video IDs
     private $videoMap = [
-        1100 => '9080cf5e-f778-4b22-89b7-80d44b686dc4', // product ID => bunny video ID
+        // 1100 => '9080cf5e-f778-4b22-89b7-80d44b686dc4', // stream security one
+        1100 => '9080cf5e-f778-4b22-89b7-80d44b686dc4', // product ID => bunny video ID // cdn key one
     ];
 
-    // Bunny Stream config
-    private $bunnySecurityKey = '9b53ec7f-ddd0-4668-86f6-9fd8ccbacdee';
     private $bunnyLibraryID   = '689912';
-    private $tokenExpiryHours = 48; // how long the link stays valid
+    private $tokenExpiryHours = 1; // how long the link stays valid
 
     public function __construct()
     {
@@ -108,13 +109,39 @@ class Skcourse extends Module
     public function generateBunnyURL($videoId)
     {
         $expiration = time() + ($this->tokenExpiryHours * 3600);
-        $raw        = $this->bunnySecurityKey . $videoId . $expiration;
-        $token      = hash('sha256', $raw);
+        $path       = '/' . $videoId . '/play_720p.mp4';
+        
+        $raw   = Configuration::get('BUNNY_SECURITY_KEY') . $path . $expiration;
+        $hash  = hash('sha256', $raw, true);
+        $token = base64_encode($hash);
+        $token = str_replace(['+', '/', '='], ['-', '_', ''], $token);
+    
+        return sprintf(
+            'https://%s%s?token=%s&expires=%d',
+            $this->bunnyCDNHost,
+            $path,
+            $token,
+            $expiration
+        );
+    }
+
+    public function getTokenExpirySeconds()
+    {
+        return $this->tokenExpiryHours * 3600;
+    }
+
+    public function generateBunnyURLWithExpiry($videoId, $expiration)
+    {
+        $path  = '/' . $videoId . '/play_720p.mp4';
+        $raw   = Configuration::get('BUNNY_SECURITY_KEY') . $path . $expiration;
+        $hash  = hash('sha256', $raw, true);
+        $token = base64_encode($hash);
+        $token = str_replace(['+', '/', '='], ['-', '_', ''], $token);
 
         return sprintf(
-            'https://iframe.mediadelivery.net/embed/%s/%s?token=%s&expires=%d',
-            $this->bunnyLibraryID,
-            $videoId,
+            'https://%s%s?token=%s&expires=%d',
+            $this->bunnyCDNHost,
+            $path,
             $token,
             $expiration
         );
