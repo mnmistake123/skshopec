@@ -79,8 +79,18 @@ class Skcourse extends Module
             // Get customer info
             $customer = new Customer($order->id_customer);
 
+
+            // 1. Fetch your clean base domain link (handles http/https automatically)
+            $baseUrl = $this->context->shop->getBaseURL(true);
+
+            // 2. Clear out any trailing slashes to avoid double-slashes in the link
+            $baseUrl = rtrim($baseUrl, '/');
+
+            // 3. Construct your custom path with the variable product ID
+            $courseUrl = $baseUrl . '/ver-curso/' . (int)$productId;
+
             // Send access email
-            $this->sendCourseAccessEmail($customer, $product['product_name'], $videoUrl);
+            $this->sendCourseAccessEmail($customer, $product['product_name'], $courseUrl);
         }
     }
 
@@ -147,13 +157,13 @@ class Skcourse extends Module
         );
     }
 
-    private function sendCourseAccessEmail($customer, $productName, $videoUrl)
+    private function sendCourseAccessEmail($customer, $productName, $courseUrl)
     {
         $templateVars = [
             '{firstname}'    => $customer->firstname,
             '{lastname}'     => $customer->lastname,
             '{product_name}' => $productName,
-            '{video_url}'    => $videoUrl,
+            '{video_url}'    => $courseUrl,
             '{shop_name}'    => Configuration::get('PS_SHOP_NAME'),
         ];
 
