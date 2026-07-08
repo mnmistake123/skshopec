@@ -8,8 +8,14 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
+        
 
         $productId = (int)Tools::getValue('id_product');
+
+        // Get product name
+        $product = new Product($productId, false, $this->context->language->id);
+        $productName = $product->name;
+
         $customerId = (int)$this->context->customer->id;
         $link = Context::getContext()->link;
 
@@ -59,6 +65,7 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
             // Show expired message instead of redirecting
             $this->context->smarty->assign([
                 'product_id'  => $productId,
+                'product_name' => $productName,
                 'expired'     => true,
                 'expires_at'  => date('d/m/Y H:i', $expiration),
             ]);
@@ -73,6 +80,7 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
         $this->context->smarty->assign([
             'video_url'   => $videoUrl,
             'product_id'  => $productId,
+            'product_name' => $productName,
             'expired'     => false,
             'expires_at'  => date('d/m/Y H:i', $expiration),
         ]);

@@ -5,11 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-12 col-lg-12 col-xl-12">
 
-            <h1 style="text-align: center; margin-bottom: 32px;">Tu curso</h1>
+            <h1 style="text-align: center; margin-bottom: 32px;">{$product_name|escape:'html'}</h1>
 
             {if $expired}
                 <div style="text-align:center; padding: 40px; background: #fff3f3; border-radius: 10px;">
-                    <h3 style="color: #cc0000;">Tu acceso ha expirado</h3>
+                    <h3 style="color: #cc0000;">Tu acceso a "{$product_name|escape:'html'}" ha expirado</h3>
                     <p style="color: #666;">Tu enlace de acceso era válido hasta {$expires_at}.</p>
                     <a href="{$link->getProductLink($product_id)}" class="btn btn-primary">
                         Renovar acceso
