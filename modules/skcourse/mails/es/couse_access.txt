@@ -5,7 +5,7 @@ Gracias por tu compra. Tu acceso al curso "{product_name}" está listo.
 Haz clic en el siguiente enlace para ver tu curso:
 {video_url}
  
-⚠️ Este enlace es personal e intransferible. Expira en 48 horas.
+⚠️ Este enlace es personal e intransferible.
  
 Si tienes problemas para acceder, responde a este email.
  

@@ -8,16 +8,15 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     public function initContent()
     {
         parent::initContent();
-        
 
-        $productId = (int)Tools::getValue('id_product');
+        $productId  = (int)Tools::getValue('id_product');
+        $moduleId   = (int)Tools::getValue('id_module'); // 0 if not in URL
+        $customerId = (int)$this->context->customer->id;
+        $link       = Context::getContext()->link;
 
         // Get product name
-        $product = new Product($productId, false, $this->context->language->id);
+        $product     = new Product($productId, false, $this->context->language->id);
         $productName = $product->name;
-
-        $customerId = (int)$this->context->customer->id;
-        $link = Context::getContext()->link;
 
         // 1. Must be logged in
         if (!$this->context->customer->isLogged()) {
@@ -26,12 +25,13 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
             Tools::redirect($link->getPageLink('authentication', true, null, ['back' => $back]));
         }
 
-        // 2. Product must exist in videoMap
-        $videoMap = $this->module->getVideoMap();
-        if (!isset($videoMap[$productId])) {
-            Tools::redirect(Context::getContext()->link->getPageLink('pagenotfound'));
-            // Tools::redirect('index.php?controller=404');
+        // 2. Product must exist in courseMap
+        $courseMap = $this->module->getCourseMap();
+        if (!is_array($courseMap) || !isset($courseMap[$productId])) {
+            Tools::redirect($link->getPageLink('pagenotfound'));
         }
+
+        $course = $courseMap[$productId];
 
         // 3. Get order date for this purchase
         $query = new DbQuery();
@@ -41,9 +41,7 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
             ->where('o.id_customer = ' . $customerId)
             ->where('od.product_id = ' . $productId)
             ->where('o.current_state = 2')
-            // ->orderBy('o.date_add', 'DESC');
-            ->orderBy('o.date_add DESC'); 
-            // ->limit(1);
+            ->orderBy('o.date_add DESC');
 
         $orderDate = Db::getInstance()->getValue($query);
 
@@ -51,38 +49,89 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
         if (!$orderDate) {
             Tools::redirect($link->getProductLink($productId));
         }
-        // // 3. Customer must have purchased this product
-        // if (!$this->customerHasPurchased($productId)) {
-        //     // Tools::redirect($link->getProductLink($productId));
-        //     Tools::redirect($link->getPageLink('product', true, null, ['id_product' => $productId]));
-        //     // Tools::redirect('index.php?controller=product&id_product=' . $productId);
-        // }
 
         // 5. Check if access has expired
-        $expiration = strtotime($orderDate) + ($this->module->getTokenExpirySeconds());
+        $expiration = strtotime($orderDate) + $this->module->getTokenExpirySeconds();
 
         if (time() > $expiration) {
-            // Show expired message instead of redirecting
             $this->context->smarty->assign([
-                'product_id'  => $productId,
+                'expired'      => true,
+                'product_id'   => $productId,
                 'product_name' => $productName,
-                'expired'     => true,
-                'expires_at'  => date('d/m/Y H:i', $expiration),
+                'expires_at'   => date('d/m/Y H:i', $expiration),
+                'show_modules' => false,
             ]);
             $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
             return;
         }
 
-        // 6. Generate signed URL with fixed expiration
-        $videoUrl = $this->module->generateBunnyURLWithExpiry($videoMap[$productId], $expiration);
+        // 6. Build base course URL
+        $baseUrl   = rtrim($this->context->shop->getBaseURL(true), '/');
+        $courseUrl = $baseUrl . '/ver-curso/' . $productId;
 
-        // 7. Pass to template
+        // 7. No module ID → show modules list
+        if (!$moduleId) {
+            $modules = [];
+            foreach ($course['modules'] as $id => $mod) {
+                $modules[] = [
+                    'id'    => $id,
+                    'title' => $mod['title'],
+                    'description' => $mod['description'] ?? '',
+                    'url'   => $courseUrl . '/modulo/' . $id,
+                ];
+            }
+
+            $this->context->smarty->assign([
+                'expired'      => false,
+                'product_id'   => $productId,
+                'product_name' => $productName,
+                'course_title' => $course['title'],
+                'modules'      => $modules,
+                'expires_at'   => date('d/m/Y H:i', $expiration),
+                'show_modules' => true,
+            ]);
+
+            $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
+            return;
+        }
+
+        // 8. Module ID in URL → validate module exists
+        if (!isset($course['modules'][$moduleId])) {
+            Tools::redirect($courseUrl);
+        }
+
+        $currentModule = $course['modules'][$moduleId];
+
+        // 9. Generate signed Bunny URL for this module
+        $videoUrl = $this->module->generateBunnyURLWithExpiry($currentModule['videoId'], $expiration);
+
+        // 10. Build prev/next navigation
+        $moduleIds  = array_keys($course['modules']);
+        $currentPos = array_search($moduleId, $moduleIds);
+        $prevUrl    = $currentPos > 0
+            ? $courseUrl . '/modulo/' . $moduleIds[$currentPos - 1]
+            : null;
+        $nextUrl    = $currentPos < count($moduleIds) - 1
+            ? $courseUrl . '/modulo/' . $moduleIds[$currentPos + 1]
+            : null;
+
+        // 11. Pass to template
         $this->context->smarty->assign([
-            'video_url'   => $videoUrl,
-            'product_id'  => $productId,
-            'product_name' => $productName,
-            'expired'     => false,
-            'expires_at'  => date('d/m/Y H:i', $expiration),
+            'expired'        => false,
+            'product_id'     => $productId,
+            'product_name'   => $productName,
+            'course_title'   => $course['title'],
+            'module_title'   => $currentModule['title'],
+            'module_id'      => $moduleId,
+            'video_url'      => $videoUrl,
+            'expires_at'     => date('d/m/Y H:i', $expiration),
+            'show_modules'   => false,
+            'course_url'     => $courseUrl,
+            'prev_url'       => $prevUrl,
+            'next_url'       => $nextUrl,
+            'total_modules'  => count($course['modules']),
+            'current_module' => $currentPos + 1,
+            'module_description' => $currentModule['description'] ?? '',
         ]);
 
         $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
@@ -92,8 +141,6 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     {
         $customerId = (int)$this->context->customer->id;
 
-        // Query orders that are paid (state 2 = payment accepted)
-        // and contain this product
         $query = new DbQuery();
         $query->select('od.id_order_detail')
               ->from('order_detail', 'od')
