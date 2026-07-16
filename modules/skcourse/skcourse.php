@@ -50,7 +50,8 @@ class Skcourse extends Module
         ],
     ];
 
-    private $tokenExpiryHours = 1;
+    // in hours its 90 days
+    private $tokenExpiryHours = 2160;
 
     public function __construct()
     {
