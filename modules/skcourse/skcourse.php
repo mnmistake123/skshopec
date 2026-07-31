@@ -7,6 +7,23 @@ class Skcourse extends Module
 {
     private $bunnyCDNHost = 'sk-shop-pull-zone.b-cdn.net';
 
+    private $contificoProductoIds = [
+        1100 => 'loejRv2E7Hpk1eQM',
+    ];
+
+    // Fixed seller data confirmed by client. If this ever needs to change
+    // per-shop, move it to Configuration instead.
+    private $contificoVendedor = [
+        'ruc'           => '1307042968001',
+        'cedula'        => '1307042968',
+        'razon_social'  => 'Saruka María Rodríguez Félix',
+        'telefonos'     => '02-382-6040',
+        'direccion'     => 'N67 De Los Ciruelos Oe1-127',
+        'tipo'          => 'N',
+        'email'         => 'daniel@manamer.com',
+        'es_extranjero' => false,
+    ];
+
     private $courseMap = [
         1100 => [
             'title'   => 'Curso de Colorimetría Saruka',
@@ -70,6 +87,19 @@ class Skcourse extends Module
 
     public function install()
     {
+        // CONTIFICO_POS_ID: waiting on client confirmation, leave blank for now.
+        // CONTIFICO_LAST_DOCUMENT: seed sequence, format 001-001-000000000.
+        // CONTIFICO_ADMIN_ALERT_EMAIL: where invoicing failures get reported.
+        if (!Configuration::get('CONTIFICO_POS_ID')) {
+            Configuration::updateValue('CONTIFICO_POS_ID', '');
+        }
+        if (!Configuration::get('CONTIFICO_LAST_DOCUMENT')) {
+            Configuration::updateValue('CONTIFICO_LAST_DOCUMENT', '001-001-000008089');
+        }
+        if (!Configuration::get('CONTIFICO_ADMIN_ALERT_EMAIL')) {
+            Configuration::updateValue('CONTIFICO_ADMIN_ALERT_EMAIL', 'rhrh1723@gmail.com');
+        }
+
         return parent::install()
             && $this->registerHook('actionOrderStatusUpdate')
             && $this->registerHook('moduleRoutes');
@@ -93,6 +123,8 @@ class Skcourse extends Module
         }
 
         $products = $order->getProducts();
+        $customer = new Customer($order->id_customer);
+        $courseLineItems = []; // products that belong to courseMap, for the invoice
 
         foreach ($products as $product) {
             $productId = (int)$product['product_id'];
@@ -106,8 +138,7 @@ class Skcourse extends Module
                 continue;
             }
 
-            $course   = $this->courseMap[$productId];
-            $customer = new Customer($order->id_customer);
+            $course = $this->courseMap[$productId];
 
             // Link to course modules list page
             $baseUrl   = rtrim($this->context->shop->getBaseURL(true), '/');
@@ -118,6 +149,12 @@ class Skcourse extends Module
                 $course['title'],
                 $courseUrl
             );
+
+            $courseLineItems[] = $product;
+        }
+
+        if (!empty($courseLineItems)) {
+            $this->sendContificoInvoice($order, $customer, $courseLineItems);
         }
     }
 
@@ -255,6 +292,232 @@ class Skcourse extends Module
             null,
             null,
             _PS_MODULE_DIR_ . $this->name . '/mails/'
+        );
+    }
+
+    // -----------------------------------------------
+    // CONTIFICO INVOICING
+    // -----------------------------------------------
+
+    /**
+     * Builds the Contifico payload for this order and sends it.
+     * $courseLineItems is the subset of $order->getProducts() that matched courseMap.
+     */
+    private function sendContificoInvoice($order, $customer, $courseLineItems)
+    {
+        $posId = Configuration::get('CONTIFICO_POS_ID');
+        if (empty($posId)) {
+            $this->notifyContificoFailure(
+                $order,
+                'CONTIFICO_POS_ID no está configurado todavía.',
+                null
+            );
+            return;
+        }
+
+        // Missing producto_id mapping stops the whole invoice rather than
+        // sending an invoice with a wrong/blank line.
+        foreach ($courseLineItems as $item) {
+            $pid = (int)$item['product_id'];
+            if (empty($this->contificoProductoIds[$pid])
+                || $this->contificoProductoIds[$pid] === 'REPLACE_ME_CONTIFICO_PRODUCTO_ID'
+            ) {
+                $this->notifyContificoFailure(
+                    $order,
+                    "Falta el producto_id de Contifico para el producto PrestaShop #{$pid}.",
+                    null
+                );
+                return;
+            }
+        }
+
+        // Cliente data: pulled from the order's invoice address, since the
+        // checkout form (Datos Personales / Direcciones step) is where
+        // cédula/RUC is actually captured, not on the Customer object.
+        $address = new Address((int)$order->id_address_invoice);
+
+        $cedula = trim((string)$address->dni);
+        if ($cedula === '') {
+            $this->notifyContificoFailure(
+                $order,
+                'El cliente no tiene cédula/RUC registrado en su dirección de facturación.',
+                null
+            );
+            return;
+        }
+
+        $phone = $address->phone_mobile ?: $address->phone;
+
+        $cliente = [
+            'ruc'           => $cedula,
+            'cedula'        => $cedula,
+            'razon_social'  => trim($address->firstname . ' ' . $address->lastname),
+            'telefonos'     => (string)$phone,
+            'direccion'     => trim($address->address1 . ' ' . $address->address2),
+            'tipo'          => 'N',
+            'email'         => $customer->email,
+            'es_extranjero' => false,
+        ];
+
+        // Totals: course prices are tax-included; Ecuador IVA is 15%.
+        $ivaRate    = 0.15;
+        $detalles   = [];
+        $subtotal12 = 0.0;
+        $ivaTotal   = 0.0;
+
+        foreach ($courseLineItems as $item) {
+            $pid          = (int)$item['product_id'];
+            $qty          = (float)$item['product_quantity'];
+            $totalTaxIncl = (float)$item['total_price_tax_incl'];
+
+            $baseGravable = round($totalTaxIncl / (1 + $ivaRate), 2);
+            $ivaLine      = round($totalTaxIncl - $baseGravable, 2);
+            $precioUnit   = $qty > 0 ? round($baseGravable / $qty, 2) : $baseGravable;
+
+            $subtotal12 += $baseGravable;
+            $ivaTotal   += $ivaLine;
+
+            $detalles[] = [
+                'producto_id'          => $this->contificoProductoIds[$pid],
+                'cantidad'             => $qty,
+                'precio'               => $precioUnit,
+                'porcentaje_iva'       => 15,
+                'porcentaje_descuento' => 0.00,
+                'base_cero'            => 0.00,
+                'base_gravable'        => $baseGravable,
+                'base_no_gravable'     => 0.00,
+            ];
+        }
+
+        $total = round($subtotal12 + $ivaTotal, 2);
+
+        $documento = $this->getNextContificoDocumentNumber();
+
+        $payload = [
+            'pos'            => $posId,
+            'fecha_emision'  => date('d/m/Y'),
+            'tipo_documento' => 'FAC',
+            'documento'      => $documento,
+            // "G" = pagado, per client instructions for now. Later this may
+            // need to start as "P"/"E" and be updated via PUT once payment
+            // is confirmed asynchronously.
+            'estado'         => 'G',
+            'electronico'    => true,
+            'autorizacion'   => '',
+            'caja_id'        => '',
+            'cliente'        => $cliente,
+            'vendedor'       => $this->contificoVendedor,
+            'descripcion'    => 'FACTURA ORDEN ' . $order->id,
+            'subtotal_0'     => 0.00,
+            'subtotal_12'    => round($subtotal12, 2),
+            'iva'            => round($ivaTotal, 2),
+            'ice'            => 0.00,
+            'servicio'       => 0.00,
+            'total'          => $total,
+            'adicional1'     => '',
+            'adicional2'     => '',
+            'detalles'       => $detalles,
+            'cobros'         => [
+                [
+                    'forma_cobro'    => 'TC',
+                    'monto'          => $total,
+                    'numero_cheque'  => null,
+                    'tipo_ping'      => 'D',
+                ],
+            ],
+        ];
+
+        $this->postContificoInvoice($order, $payload, $documento);
+    }
+
+    /**
+     * Increments and persists the last used document number.
+     * Format: [0-9]{3}-[0-9]{3}-[0-9]{1,9}, zero-padded on the last segment.
+     */
+    private function getNextContificoDocumentNumber()
+    {
+        $last  = Configuration::get('CONTIFICO_LAST_DOCUMENT');
+        $parts = explode('-', $last);
+
+        $serie1 = $parts[0] ?? '001';
+        $serie2 = $parts[1] ?? '001';
+        $seq    = isset($parts[2]) ? (int)$parts[2] : 0;
+
+        $seq++;
+        $next = $serie1 . '-' . $serie2 . '-' . str_pad($seq, 9, '0', STR_PAD_LEFT);
+
+        Configuration::updateValue('CONTIFICO_LAST_DOCUMENT', $next);
+
+        return $next;
+    }
+
+    private function postContificoInvoice($order, $payload, $documento)
+    {
+        $apiKey = Configuration::get('CONTIFICO_API_KEY');
+        if (empty($apiKey)) {
+            $this->notifyContificoFailure($order, 'CONTIFICO_API_KEY no está configurada.', null);
+            return;
+        }
+
+        $ch = curl_init('https://api.contifico.com/sistema/api/v1/documento/');
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Authorization: ' . $apiKey,
+            ],
+            CURLOPT_TIMEOUT        => 20,
+        ]);
+
+        $response  = curl_exec($ch);
+        $httpCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+
+        if ($curlError || $httpCode < 200 || $httpCode >= 300) {
+            $this->notifyContificoFailure(
+                $order,
+                "Fallo al crear factura Contifico (documento {$documento}). HTTP {$httpCode}. cURL error: {$curlError}",
+                $response
+            );
+        }
+    }
+
+    private function notifyContificoFailure($order, $message, $responseBody)
+    {
+        $to      = Configuration::get('CONTIFICO_ADMIN_ALERT_EMAIL') ?: 'rhrh1723@gmail.com';
+        $subject = '[SKShop] Fallo al facturar orden #' . $order->id;
+
+        $templateVars = [
+            '{order_id}'      => $order->id,
+            '{customer_id}'   => $order->id_customer,
+            '{date}'          => date('Y-m-d H:i:s'),
+            '{message}'       => $message,
+            '{response_body}' => $responseBody ? $responseBody : '(sin respuesta)',
+        ];
+
+        Mail::Send(
+            (int)Configuration::get('PS_LANG_DEFAULT'),
+            'contifico_failure',
+            $subject,
+            $templateVars,
+            $to,
+            null,
+            null,
+            null,
+            null,
+            null,
+            _PS_MODULE_DIR_ . $this->name . '/mails/'
+        );
+
+        PrestaShopLogger::addLog(
+            'Skcourse Contifico invoicing failed for order #' . $order->id . ': ' . $message,
+            3, // severity: error
+            null,
+            'Order',
+            (int)$order->id
         );
     }
 }
