@@ -7,8 +7,9 @@ class Skcourse extends Module
 {
     private $bunnyCDNHost = 'sk-shop-pull-zone.b-cdn.net';
 
+    // Prestashop -> contifico ID's match
     private $contificoProductoIds = [
-        1100 => 'loejRv2E7Hpk1eQM',
+        1100 => '0yelYvpX4fgDqaER',
     ];
 
     // Fixed seller data confirmed by client. If this ever needs to change
@@ -20,7 +21,7 @@ class Skcourse extends Module
         'telefonos'     => '02-382-6040',
         'direccion'     => 'N67 De Los Ciruelos Oe1-127',
         'tipo'          => 'N',
-        'email'         => 'daniel@manamer.com',
+        'email'         => 'vendedor@contifico.com',
         'es_extranjero' => false,
     ];
 
@@ -87,11 +88,16 @@ class Skcourse extends Module
 
     public function install()
     {
-        // CONTIFICO_POS_ID: waiting on client confirmation, leave blank for now.
+        // CONTIFICO_POS_ID / CONTIFICO_CAJA_ID: confirmed working values from
+        // client's tested Postman sample. Update via Configuration if Contifico
+        // ever issues new ones.
         // CONTIFICO_LAST_DOCUMENT: seed sequence, format 001-001-000000000.
         // CONTIFICO_ADMIN_ALERT_EMAIL: where invoicing failures get reported.
         if (!Configuration::get('CONTIFICO_POS_ID')) {
-            Configuration::updateValue('CONTIFICO_POS_ID', '');
+            Configuration::updateValue('CONTIFICO_POS_ID', '2c9e5160-f360-44e4-9dfe-bed082c1d41d');
+        }
+        if (!Configuration::get('CONTIFICO_CAJA_ID')) {
+            Configuration::updateValue('CONTIFICO_CAJA_ID', 'gArb6965jUQxlayR');
         }
         if (!Configuration::get('CONTIFICO_LAST_DOCUMENT')) {
             Configuration::updateValue('CONTIFICO_LAST_DOCUMENT', '001-001-000008089');
@@ -315,6 +321,16 @@ class Skcourse extends Module
             return;
         }
 
+        $cajaIdCheck = Configuration::get('CONTIFICO_CAJA_ID');
+        if (empty($cajaIdCheck)) {
+            $this->notifyContificoFailure(
+                $order,
+                'CONTIFICO_CAJA_ID no está configurado todavía.',
+                null
+            );
+            return;
+        }
+
         // Missing producto_id mapping stops the whole invoice rather than
         // sending an invoice with a wrong/blank line.
         foreach ($courseLineItems as $item) {
@@ -348,8 +364,12 @@ class Skcourse extends Module
 
         $phone = $address->phone_mobile ?: $address->phone;
 
+        // Ecuador convention: a natural person's RUC is their cédula (10 digits)
+        // + "001" establishment suffix, unless a full 13-digit RUC was captured.
+        $ruc = strlen($cedula) === 13 ? $cedula : $cedula . '001';
+
         $cliente = [
-            'ruc'           => $cedula,
+            'ruc'           => $ruc,
             'cedula'        => $cedula,
             'razon_social'  => trim($address->firstname . ' ' . $address->lastname),
             'telefonos'     => (string)$phone,
@@ -386,38 +406,49 @@ class Skcourse extends Module
                 'base_cero'            => 0.00,
                 'base_gravable'        => $baseGravable,
                 'base_no_gravable'     => 0.00,
+                'porcentaje_ice'       => 0,
+                'valor_ice'            => 0,
+                'serie'                => null,
+                'descripcion'          => null,
             ];
         }
 
         $total = round($subtotal12 + $ivaTotal, 2);
 
         $documento = $this->getNextContificoDocumentNumber();
+        $cajaId    = Configuration::get('CONTIFICO_CAJA_ID');
 
         $payload = [
-            'pos'            => $posId,
-            'fecha_emision'  => date('d/m/Y'),
-            'tipo_documento' => 'FAC',
-            'documento'      => $documento,
+            'pos'                  => $posId,
+            'electronico'          => true,
+            'reserva_relacionada'  => null,
+            'fecha_emision'        => date('d/m/Y'),
+            'hora_emision'         => date('H:i:s'),
+            'tipo_registro'        => 'CLI',
+            'tipo_documento'       => 'FAC',
+            'documento'            => $documento,
             // "G" = pagado, per client instructions for now. Later this may
             // need to start as "P"/"E" and be updated via PUT once payment
             // is confirmed asynchronously.
-            'estado'         => 'G',
-            'electronico'    => true,
-            'autorizacion'   => '',
-            'caja_id'        => '',
-            'cliente'        => $cliente,
-            'vendedor'       => $this->contificoVendedor,
-            'descripcion'    => 'FACTURA ORDEN ' . $order->id,
-            'subtotal_0'     => 0.00,
-            'subtotal_12'    => round($subtotal12, 2),
-            'iva'            => round($ivaTotal, 2),
-            'ice'            => 0.00,
-            'servicio'       => 0.00,
-            'total'          => $total,
-            'adicional1'     => '',
-            'adicional2'     => '',
-            'detalles'       => $detalles,
-            'cobros'         => [
+            'estado'               => 'G',
+            // Left blank: Contifico/SRI issues the real authorization number
+            // once the electronic document is processed; we don't invent one.
+            'autorizacion'         => '',
+            'referencia'           => '',
+            'caja_id'              => $cajaId,
+            'cliente'              => $cliente,
+            'vendedor'             => $this->contificoVendedor,
+            'descripcion'          => 'FACTURA ORDEN ' . $order->id,
+            'subtotal_0'           => 0.00,
+            'subtotal_12'          => round($subtotal12, 2),
+            'iva'                  => round($ivaTotal, 2),
+            'ice'                  => 0.00,
+            'servicio'             => 0.00,
+            'total'                => $total,
+            'adicional1'           => '',
+            'adicional2'           => '',
+            'detalles'             => $detalles,
+            'cobros'               => [
                 [
                     'forma_cobro'    => 'TC',
                     'monto'          => $total,

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="font-family: Arial, sans-serif; color: #1a1a1a; background: #f7f7f7; padding: 24px;">
+  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #eeeeee; border-radius: 8px; padding: 24px;">
+    <h2 style="color: #cc0000; margin-top: 0;">Fallo al facturar en Contifico</h2>
+    <p>Ocurrió un problema al generar la factura en Contifico para la siguiente orden:</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+      <tr><td style="padding: 6px 0; color: #666;">Orden</td><td style="padding: 6px 0;"><strong>#{order_id}</strong></td></tr>
+      <tr><td style="padding: 6px 0; color: #666;">Cliente ID</td><td style="padding: 6px 0;">{customer_id}</td></tr>
+      <tr><td style="padding: 6px 0; color: #666;">Fecha</td><td style="padding: 6px 0;">{date}</td></tr>
+    </table>
+    <p style="margin-bottom: 4px;"><strong>Detalle:</strong></p>
+    <p style="background: #fff3f3; padding: 12px 16px; border-radius: 6px; white-space: pre-wrap;">{message}</p>
+    <p style="margin-bottom: 4px;"><strong>Respuesta de Contifico:</strong></p>
+    <p style="background: #f4f4f4; padding: 12px 16px; border-radius: 6px; white-space: pre-wrap; font-size: 13px;">{response_body}</p>
+  </div>
+</body>
+</html>

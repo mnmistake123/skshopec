@@ -1,0 +1,11 @@
+Ocurrio un problema al generar la factura en Contifico.
+
+Orden: #{order_id}
+Cliente ID: {customer_id}
+Fecha: {date}
+
+Detalle:
+{message}
+
+Respuesta de Contifico:
+{response_body}
