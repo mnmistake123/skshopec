@@ -21,7 +21,7 @@ class Skcourse extends Module
         'telefonos'     => '02-382-6040',
         'direccion'     => 'N67 De Los Ciruelos Oe1-127',
         'tipo'          => 'N',
-        'email'         => 'vendedor@contifico.com',
+        'email'         => 'daniel@manamer.com',
         'es_extranjero' => false,
     ];
 
@@ -430,7 +430,7 @@ class Skcourse extends Module
             // "G" = pagado, per client instructions for now. Later this may
             // need to start as "P"/"E" and be updated via PUT once payment
             // is confirmed asynchronously.
-            'estado'               => 'G',
+            'estado'               => 'P',
             // Left blank: Contifico/SRI issues the real authorization number
             // once the electronic document is processed; we don't invent one.
             'autorizacion'         => '',
@@ -507,17 +507,56 @@ class Skcourse extends Module
         $curlError = curl_error($ch);
         curl_close($ch);
 
-        if ($curlError || $httpCode < 200 || $httpCode >= 300) {
+        $isSuccess = !$curlError && $httpCode >= 200 && $httpCode < 300;
+
+        $this->logContificoAttempt(
+            $order,
+            $documento,
+            $isSuccess ? 'success' : 'failure',
+            (int)$httpCode,
+            $payload,
+            $response,
+            $curlError
+        );
+
+        if (!$isSuccess) {
             $this->notifyContificoFailure(
                 $order,
                 "Fallo al crear factura Contifico (documento {$documento}). HTTP {$httpCode}. cURL error: {$curlError}",
-                $response
+                $response,
+                true
             );
         }
     }
 
-    private function notifyContificoFailure($order, $message, $responseBody)
+    private function logContificoAttempt($order, $documento, $status, $httpCode, $payload, $response, $errorMessage = null)
     {
+        $message  = "Contifico [{$status}] orden #{$order->id} | documento={$documento} | HTTP={$httpCode}";
+        if ($errorMessage) {
+            $message .= " | error: {$errorMessage}";
+        }
+        if ($payload) {
+            $message .= "\n\nPayload enviado:\n" . json_encode($payload, JSON_PRETTY_PRINT);
+        }
+        if ($response !== null && $response !== '') {
+            $message .= "\n\nRespuesta Contifico:\n" . $response;
+        }
+
+        PrestaShopLogger::addLog(
+            $message,
+            $status === 'success' ? 1 : 3, // 1 = Informative, 3 = Error
+            null,
+            'Order',
+            (int)$order->id
+        );
+    }
+
+    private function notifyContificoFailure($order, $message, $responseBody, $alreadyLogged = false)
+    {
+        if (!$alreadyLogged) {
+            $this->logContificoAttempt($order, 'N/A', 'failure', 0, null, $responseBody, $message);
+        }
+
         $to      = Configuration::get('CONTIFICO_ADMIN_ALERT_EMAIL') ?: 'rhrh1723@gmail.com';
         $subject = '[SKShop] Fallo al facturar orden #' . $order->id;
 
