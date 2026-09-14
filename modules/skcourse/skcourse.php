@@ -59,7 +59,7 @@ class Skcourse extends Module
                     'description' => 'En este módulo final integrarás todo lo aprendido y transformarás tu forma de vestir en una herramienta de proyección personal. Identificarás los errores más comunes que afectan tu imagen, validarás tu paleta, revisarás tus combinaciones y crearás un outfit final alineado con tu esencia, tu contraste y tus colores ideales. Este cierre no solo busca que te veas mejor, sino que entiendas cómo tomar decisiones con intención, seguridad y claridad cada vez que abras tu clóset. Aquí dejarás de improvisar y empezarás a proyectar una imagen más coherente, auténtica y poderosa.',
                     'videoId' => '32929b7b-a67d-4acd-91f7-ee358eb80af4',
                 ],                
-                6 => [
+                7 => [
                     'title'   => 'CIERRE',
                     'description' => 'Este es el cierre de tu transformación. En esta lección consolidarás todo lo aprendido a lo largo del curso, validarás los cambios que has logrado y descubrirás cómo convertir este conocimiento en un hábito para toda la vida. Además, recibirás las recomendaciones finales para seguir fortaleciendo tu estilo, compartir tu evolución y formar parte de una comunidad que continúa aprendiendo y creciendo. Porque este curso no termina aquí: es el inicio de una nueva forma de vestir, de elegir y, sobre todo, de proyectarte con seguridad y autenticidad.',
                     'videoId' => '2f922857-877f-4373-a1ac-831f9712bf10',
@@ -108,7 +108,8 @@ class Skcourse extends Module
 
         return parent::install()
             && $this->registerHook('actionOrderStatusUpdate')
-            && $this->registerHook('moduleRoutes');
+            && $this->registerHook('moduleRoutes')
+            && $this->registerHook('actionValidateCustomerAddressForm');
     }
 
     public function uninstall()
@@ -289,7 +290,7 @@ class Skcourse extends Module
         Mail::Send(
             (int)Configuration::get('PS_LANG_DEFAULT'),
             'course_access',
-            $this->l('Your course access link'),
+            $this->l('Tu enlace de acceso al curso'),
             $templateVars,
             $customer->email,
             $customer->firstname . ' ' . $customer->lastname,
@@ -482,15 +483,15 @@ class Skcourse extends Module
         return $next;
     }
 
-    private function postContificoInvoice($order, $payload, $documento)
+    private function postContificoInvoice($order, $payload, $documento, $attempt = 1, $maxAttempts = 3)
     {
         $apiKey = Configuration::get('CONTIFICO_API_KEY');
         if (empty($apiKey)) {
             $this->notifyContificoFailure($order, 'CONTIFICO_API_KEY no está configurada.', null);
             return;
         }
-
-        $ch = curl_init('https://api.contifico.com/sistema/api/v1/documento/');
+        
+        $ch = curl_init('https://api.contifico.com/sistema/api/v2/documento/');
         curl_setopt_array($ch, [
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST           => true,
@@ -501,14 +502,40 @@ class Skcourse extends Module
             ],
             CURLOPT_TIMEOUT        => 20,
         ]);
-
+    
         $response  = curl_exec($ch);
         $httpCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curlError = curl_error($ch);
         curl_close($ch);
-
+    
+        // Duplicate document number: bump the counter and retry, instead of
+        // failing the whole invoice. CONTIFICO_LAST_DOCUMENT is our local
+        // source of truth, but it can drift from Contifico's actual state
+        // (manual entries, other integrations, failed-but-partially-applied
+        // requests), so this retry is the safety net for that drift.
+        $isDuplicate = $httpCode === 406
+            && stripos((string)$response, 'ya existe') !== false;
+    
+        if ($isDuplicate && $attempt < $maxAttempts) {
+            $this->logContificoAttempt(
+                $order,
+                $documento,
+                'failure',
+                $httpCode,
+                $payload,
+                $response,
+                "Documento duplicado, reintentando con el siguiente número (intento {$attempt})."
+            );
+    
+            $nextDocumento = $this->getNextContificoDocumentNumber();
+            $payload['documento'] = $nextDocumento;
+    
+            $this->postContificoInvoice($order, $payload, $nextDocumento, $attempt + 1, $maxAttempts);
+            return;
+        }
+    
         $isSuccess = !$curlError && $httpCode >= 200 && $httpCode < 300;
-
+    
         $this->logContificoAttempt(
             $order,
             $documento,
@@ -518,11 +545,14 @@ class Skcourse extends Module
             $response,
             $curlError
         );
-
+    
         if (!$isSuccess) {
+            $extra = $isDuplicate
+                ? " (se agotaron los {$maxAttempts} intentos de número de documento)"
+                : '';
             $this->notifyContificoFailure(
                 $order,
-                "Fallo al crear factura Contifico (documento {$documento}). HTTP {$httpCode}. cURL error: {$curlError}",
+                "Fallo al crear factura Contifico (documento {$documento}). HTTP {$httpCode}. cURL error: {$curlError}{$extra}",
                 $response,
                 true
             );
@@ -589,5 +619,60 @@ class Skcourse extends Module
             'Order',
             (int)$order->id
         );
+    }
+
+    public function hookActionValidateCustomerAddressForm($params)
+    {
+        /** @var CustomerAddressForm $form */
+        $form = $params['form'];
+
+        $dniField = $form->getField('dni');
+        if (!$dniField) {
+            return; // country doesn't require DNI, nothing to validate
+        }
+
+        $dni = trim($dniField->getValue());
+
+        if ($dni !== '' && !$this->isValidEcuadorId($dni)) {
+            $dniField->addError('La cédula o RUC ingresado no es válido. Verifica el número e intenta nuevamente.');
+        }
+    }
+
+    private function isValidEcuadorId($id)
+    {
+        $id = preg_replace('/\D/', '', $id);
+
+        if (strlen($id) === 13) {
+            if (substr($id, 10, 3) !== '001') {
+                return false;
+            }
+            $id = substr($id, 0, 10);
+        }
+
+        if (strlen($id) !== 10) {
+            return false;
+        }
+
+        $province    = (int)substr($id, 0, 2);
+        $thirdDigit  = (int)$id[2];
+
+        if ($province < 1 || $province > 24 || $thirdDigit > 6) {
+            return false;
+        }
+
+        $coef = [2, 1, 2, 1, 2, 1, 2, 1, 2];
+        $sum  = 0;
+
+        for ($i = 0; $i < 9; $i++) {
+            $val = (int)$id[$i] * $coef[$i];
+            if ($val >= 10) {
+                $val -= 9;
+            }
+            $sum += $val;
+        }
+
+        $verifier = (10 - ($sum % 10)) % 10;
+
+        return $verifier === (int)$id[9];
     }
 }

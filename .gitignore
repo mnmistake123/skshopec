@@ -63,3 +63,7 @@ themes/*/compiled/
 php_errors.log
 error_log
 EOF
+
+modules/paypal/
+
+config/
