@@ -9,7 +9,10 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
-        $productId  = (int)Tools::getValue('id_product');
+        $isBonus    = (bool)Tools::getValue('bonus');
+        // The bonus route (/regalo-colorimetria) carries no id_product in the URL,
+        // it's tied to the colorimetría course purchase itself.
+        $productId  = $isBonus ? 1100 : (int)Tools::getValue('id_product');
         $moduleId   = (int)Tools::getValue('id_module'); // 0 if not in URL
         $customerId = (int)$this->context->customer->id;
         $link       = Context::getContext()->link;
@@ -60,6 +63,7 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
                 'product_name' => $productName,
                 'expires_at'   => date('d/m/Y H:i', $expiration),
                 'show_modules' => false,
+                'show_bonus'   => false,
             ]);
             $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
             return;
@@ -68,6 +72,26 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
         // 6. Build base course URL
         $baseUrl   = rtrim($this->context->shop->getBaseURL(true), '/');
         $courseUrl = $baseUrl . '/ver-curso/' . $productId;
+        $bonusUrl  = $baseUrl . '/regalo-colorimetria';
+
+        // 6b. Bonus route → show the gift page instead of modules/player.
+        // Access already passed through the exact same login/purchase/expiry
+        // checks above (steps 1-5), so the gift is gated just like the videos.
+        if ($isBonus) {
+            $this->context->smarty->assign([
+                'expired'      => false,
+                'product_id'   => $productId,
+                'product_name' => $productName,
+                'course_title' => $course['title'],
+                'course_url'   => $courseUrl,
+                'expires_at'   => date('d/m/Y H:i', $expiration),
+                'show_modules' => false,
+                'show_bonus'   => true,
+            ]);
+
+            $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
+            return;
+        }
 
         // 7. No module ID → show modules list
         if (!$moduleId) {
@@ -89,6 +113,8 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
                 'modules'      => $modules,
                 'expires_at'   => date('d/m/Y H:i', $expiration),
                 'show_modules' => true,
+                'show_bonus'   => false,
+                'bonus_url'    => $bonusUrl,
             ]);
 
             $this->setTemplate('module:skcourse/views/templates/front/video.tpl');
@@ -126,6 +152,7 @@ class SkcourseVideoModuleFrontController extends ModuleFrontController
             'video_url'      => $videoUrl,
             'expires_at'     => date('d/m/Y H:i', $expiration),
             'show_modules'   => false,
+            'show_bonus'     => false,
             'course_url'     => $courseUrl,
             'prev_url'       => $prevUrl,
             'next_url'       => $nextUrl,

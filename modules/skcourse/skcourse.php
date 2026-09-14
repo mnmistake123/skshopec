@@ -211,6 +211,17 @@ class Skcourse extends Module
                     'module' => 'skcourse',
                 ],
             ],
+            // Bonus gift page (standalone, no product id in URL): /regalo-colorimetria
+            'module-skcourse-bonus' => [
+                'controller' => 'video',
+                'rule'       => 'regalo-colorimetria',
+                'keywords'   => [],
+                'params'     => [
+                    'fc'     => 'module',
+                    'module' => 'skcourse',
+                    'bonus'  => 1,
+                ],
+            ],
         ];
     }
 

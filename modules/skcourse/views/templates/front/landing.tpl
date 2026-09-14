@@ -118,6 +118,17 @@
   .sr-about__stats { display: flex; gap: 26px; margin-top: 32px; }
   .sr-about__stat b { display: block; color: var(--wine); font-family: Georgia, serif; font-size: 33px; font-weight: 400; } .sr-about__stat span { color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 
+  .sr-gift { padding: 100px 0; background: var(--wine); color: #fff; }
+  .sr-gift__grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(30px, 6vw, 80px); align-items: center; }
+  .sr-gift__badge { display: inline-flex; align-items: center; justify-content: center; width: 220px; height: 220px; border-radius: 50%; border: 1px dashed rgba(255,255,255,.5); font-family: Georgia, serif; font-size: 15px; font-style: italic; text-align: center; padding: 24px; margin: 0 auto; }
+  .sr-gift .sr-kicker { color: #f3c8cb; }
+  .sr-gift h2 { color: #fff; font-size: clamp(30px, 4vw, 44px); }
+  .sr-gift p.sr-copy { color: rgba(255,255,255,.82); margin: 18px 0 0; max-width: 480px; }
+  .sr-gift__list { list-style: none; padding: 0; margin: 22px 0 0; }
+  .sr-gift__list li { padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.18); font-size: 14px; color: rgba(255,255,255,.9); }
+  .sr-gift__list li:before { content: "🎁"; margin-right: 10px; }
+  @media (max-width: 700px) { .sr-gift__grid { grid-template-columns: 1fr; text-align: center; } .sr-gift__list { text-align: left; } }
+
   .sr-invest { padding: 120px 0; text-align: center; background: var(--cream); }
   .sr-invest .sr-heading { margin: 0 auto 38px; }
   .sr-price-card { width: min(460px, 100%); margin: 0 auto; padding: 48px 38px; background: #fff; border: 1px solid var(--sand); box-shadow: 14px 14px 0 var(--sand); }
@@ -191,6 +202,20 @@
   <section class="sr-about"><div class="sr-about__photo"><img src="https://landing-sk-images.b-cdn.net/sk7.webp" alt="Saruka Rodriguez"></div><div class="sr-about__content"><span class="sr-kicker">Tu instructora</span><h2 class="sr-title">Aprende de quien hace de la imagen un <span class="sr-script">lenguaje.</span></h2><p class="sr-copy">Saruka Rodriguez es asesora de moda ecuatoriana y fundadora de la marca que lleva su nombre. Su mirada combina moda, identidad y una convicción muy simple: verte bien debe hacerte sentir todavía más tú.</p><p class="sr-copy">En este curso comparte el método que convierte el color en tu herramienta de estilo más poderosa.</p><div class="sr-about__stats"><div class="sr-about__stat"><b>10+</b><span>Países</span></div><div class="sr-about__stat"><b>2K+</b><span>Alumnas</span></div><div class="sr-about__stat"><b>15+</b><span>Años creando</span></div></div></div></section>
 
   <section class="sr-testimonials"><div class="sr-wrap"><div class="sr-heading"><span class="sr-kicker">Lo que dicen ellas</span><h2 class="sr-title">Miles de mujeres ya encontraron sus colores.</h2></div><div class="sr-testimonials__grid"><article class="sr-testimonial"><span class="sr-testimonial__stars">★★★★★</span><p>“Nunca entendí por qué ciertos colores me apagaban hasta que tomé este curso. Ahora compro con criterio y me siento más yo que nunca.”</p><b>— María José, Quito</b></article><article class="sr-testimonial"><span class="sr-testimonial__stars">★★★★★</span><p>“Llevaba años comprando ropa que nunca usaba. En el módulo 4 entendí por qué y reorganicé todo mi clóset en un fin de semana.”</p><b>— Valentina, Guayaquil</b></article><article class="sr-testimonial"><span class="sr-testimonial__stars">★★★★★</span><p>“El mejor dinero que he invertido en mí misma. Simple, práctico y transformador. Saruka explica todo con una claridad increíble.”</p><b>— Daniela, Cuenca</b></article></div></div></section>
+
+  <section class="sr-gift"><div class="sr-wrap sr-gift__grid">
+    <div class="sr-gift__badge">Regalo exclusivo<br>incluido</div>
+    <div>
+      <span class="sr-kicker">Sorpresa para ti</span>
+      <h2 class="sr-title">Con tu compra recibes un regalo: <span class="sr-script">El Detective de tu Color.</span></h2>
+      <p class="sr-copy">Un test interactivo pensado para que descubras tu estación cromática en minutos, con tu paleta personal, tus colores estrella y una guía de qué usar en cada prenda.</p>
+      <ul class="sr-gift__list">
+        <li>Test de 10 preguntas para identificar tu estación cromática</li>
+        <li>Tu paleta completa de 12 colores, lista para guardar</li>
+        <li>Guía rápida de qué color usar en cada prenda</li>
+      </ul>
+    </div>
+  </div></section>
 
   <section class="sr-invest"><div class="sr-wrap"><div class="sr-heading"><span class="sr-kicker">Tu inversión</span><h2 class="sr-title">No es otro curso. Es una forma nueva de <span class="sr-script">elegirte.</span></h2><p class="sr-copy">Una decisión que te acompañará en cada compra, cada foto y cada vez que te mires al espejo.</p></div><div class="sr-price-card"><span class="sr-price-card__label">Acceso completo al curso</span><div class="sr-price"><sup>$</sup>{$price}</div><p>USD · pago único · acceso inmediato</p><a class="sr-button" href="{$buy_url}">Quiero mi acceso ahora</a><p class="sr-price-card__fine">Hazlo a tu ritmo. Vuelve a las lecciones siempre que lo necesites.</p></div></div></section>
 
