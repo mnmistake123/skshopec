@@ -211,13 +211,16 @@
   .skcourse-bonus .swatch-cell:hover .tip{ opacity:1; }
 
   .skcourse-bonus .guide-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
-  @media (max-width:760px){ .skcourse-bonus .guide-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:900px){ .skcourse-bonus .guide-grid{ grid-template-columns:repeat(2,1fr); } }
   @media (max-width:480px){ .skcourse-bonus .guide-grid{ grid-template-columns:1fr; } }
-  .skcourse-bonus .guide-card{ background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; display:flex; gap:14px; align-items:flex-start; }
-  .skcourse-bonus .guide-card .sw{ width:44px; height:44px; border-radius:6px; flex:none; border:1px solid var(--line-strong); margin-top:2px; }
-  .skcourse-bonus .guide-card h4{ font-family:var(--font-body); font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-faint); margin-bottom:5px; font-weight:700; }
-  .skcourse-bonus .guide-card p{ font-size:13.8px; font-weight:600; font-family:var(--font-display); }
-  .skcourse-bonus .guide-card .tip{ font-size:12.3px; color:var(--text-muted); margin-top:5px; line-height:1.4; font-weight:400; font-family:var(--font-body); }
+  .skcourse-bonus .guide-card{ background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .skcourse-bonus .guide-card h4{ font-family:var(--font-body); font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--text-faint); font-weight:700; }
+  .skcourse-bonus .guide-card .name-line{ font-size:13.8px; font-weight:600; font-family:var(--font-display); }
+  .skcourse-bonus .guide-card .tip{ font-size:12.3px; color:var(--text-muted); line-height:1.4; font-weight:400; font-family:var(--font-body); }
+  .skcourse-bonus .tri-swatch{ display:flex; gap:7px; }
+  .skcourse-bonus .tri-item{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; min-width:0; }
+  .skcourse-bonus .tri-item .sw{ width:100%; aspect-ratio:1; border-radius:6px; border:1px solid var(--line-strong); }
+  .skcourse-bonus .tri-item span{ font-size:9.3px; color:var(--text-faint); text-align:center; line-height:1.25; }
 
   .skcourse-bonus .avoid-row{ display:flex; gap:14px; flex-wrap:wrap; }
   .skcourse-bonus .avoid-chip{ display:flex; align-items:center; gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:9px 14px 9px 9px; }
@@ -226,6 +229,15 @@
   .skcourse-bonus .avoid-chip .sw::after{ transform:rotate(45deg); }
   .skcourse-bonus .avoid-chip .sw::before{ transform:rotate(-45deg); }
   .skcourse-bonus .avoid-chip span{ font-size:13px; color:var(--text-muted); }
+
+  .skcourse-bonus .celeb-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .skcourse-bonus .celeb-card{ width:104px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; }
+  .skcourse-bonus .celeb-card .photo-wrap{ position:relative; width:96px; height:96px; }
+  .skcourse-bonus .celeb-card .photo{ position:absolute; inset:0; width:96px; height:96px; border-radius:50%; object-fit:cover; border:2px solid var(--fam-color,var(--line-strong)); background:var(--surface-2); }
+  .skcourse-bonus .celeb-card .photo.placeholder{ display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:600; font-size:26px; color:#fff; background:var(--fam-color,var(--wine)); z-index:0; }
+  .skcourse-bonus .celeb-card img.photo{ z-index:1; }
+  .skcourse-bonus .celeb-card .name{ font-size:11.5px; color:var(--text-muted); line-height:1.3; }
+  .skcourse-bonus #celeb-section[hidden]{ display:none; }
 
   .skcourse-bonus .why-card{ margin-top:26px; background:var(--bg-alt); border:1px solid var(--line); border-radius:4px; padding:20px 22px; }
   .skcourse-bonus .why-card p{ font-size:13.8px; color:var(--text-muted); line-height:1.65; }
@@ -350,7 +362,7 @@
     <div class="section-head">
       <div class="kicker">tus 5 colores estrella</div>
       <h2>Los que te hacen ver más despierta</h2>
-      <p>Si solo recuerdas cinco colores de esta paleta, que sean estos. Úsalos cerca de la cara: blusas, bufandas, el cuello de una chaqueta.</p>
+      <p>Elegimos las opciones más versátiles y fáciles de llevar de tu paleta — pensadas para el día a día, no solo para una ocasión especial. Úsalos cerca de la cara: blusas, bufandas, el cuello de una chaqueta.</p>
     </div>
     <div class="stars-row" id="stars-row"></div>
 
@@ -364,7 +376,7 @@
     <div class="section-head">
       <div class="kicker">guía de prendas</div>
       <h2>El color ideal para cada pieza de tu clóset</h2>
-      <p>No se trata de comprar ropa nueva — es saber, la próxima vez que elijas, cuál de tus opciones te va a favorecer más.</p>
+      <p>Cada tarjeta muestra tres colores para combinar: tu <strong>base</strong> neutra, el color <strong>principal</strong> de la prenda y un <strong>acento</strong> para accesorios o detalles.</p>
     </div>
     <div class="guide-grid" id="guide-grid"></div>
 
@@ -374,6 +386,15 @@
       <p>No son colores "prohibidos" — son solo los que más te alejan de tu punto más luminoso. Úsalos lejos del rostro (un pantalón, un zapato) si te encantan.</p>
     </div>
     <div class="avoid-row" id="avoid-row"></div>
+
+    <div id="celeb-section" hidden>
+      <div class="section-head">
+        <div class="kicker">celebridades de tu estación</div>
+        <h2>Rostros que comparten tu paleta</h2>
+        <p>Personas públicas que suelen ubicarse en tu misma familia de color — obsérvalas la próxima vez que busques inspiración de outfit o maquillaje.</p>
+      </div>
+      <div class="celeb-row" id="celeb-row"></div>
+    </div>
 
     <div class="end-row">
       <button class="btn-ghost" id="copy-btn">Copiar mi resultado</button>
@@ -479,86 +500,110 @@
   var SEASONS = {
     "primavera-clara": { family:"primavera", famColor:"#b8590c", name:"Primavera Clara", meta:"La más luminosa de las estaciones cálidas.",
       metaphor:"Eres como el primer rayo de sol en una mañana de abril: cálida, ligera y fresca.",
-      palette:[C("#FFB88C","Durazno"),C("#FF9E80","Coral suave"),C("#FFE28A","Amarillo mantequilla"),C("#B4E197","Verde manzana"),C("#8FE3D6","Turquesa claro"),C("#FFC4B0","Rosa melocotón"),C("#E8C39E","Camel claro"),C("#FFF3E0","Marfil cálido","neutral"),C("#A8D8E8","Azul cielo cálido"),C("#FF8FA3","Coral rosado","lip"),C("#A0E8C0","Verde menta"),C("#E6C77A","Dorado claro","metal")],
-      stars:["#FFB88C","#FF9E80","#FFE28A","#8FE3D6","#B4E197"],
+      palette:[C("#FFB88C","Durazno"),C("#FF9E80","Coral suave","accent"),C("#FFE28A","Amarillo mantequilla"),C("#B4E197","Verde manzana"),C("#8FE3D6","Turquesa claro"),C("#FFC4B0","Rosa melocotón"),C("#E8C39E","Camel claro"),C("#FFF3E0","Marfil cálido","neutral"),C("#A8D8E8","Azul cielo cálido"),C("#FF8FA3","Coral rosado","lip"),C("#A0E8C0","Verde menta"),C("#E6C77A","Dorado claro","metal")],
+      stars:["#FFB88C","#FFE28A","#B4E197","#8FE3D6","#E8C39E"],
       denim:{h:"#4A7FA5", n:"Denim azul cálido, lavado medio"},
+      baseSet:[{h:"#FFF3E0",n:"Marfil cálido"},{h:"#E8C39E",n:"Camel claro"},{h:"#E6C77A",n:"Dorado claro"}],
+      accentSet:[{h:"#FF9E80",n:"Coral suave"},{h:"#FF8FA3",n:"Coral rosado"},{h:"#8FE3D6",n:"Turquesa claro"}],
       avoid:[C("#000000","Negro puro"),C("#6E7B85","Gris ceniza frío"),C("#4B1E6B","Morado intenso frío")] },
 
     "primavera-calida": { family:"primavera", famColor:"#b8590c", name:"Primavera Cálida", meta:"El corazón de la familia primavera: cálida y viva.",
       metaphor:"Eres como un jardín en su mejor momento: cálida, jugosa y llena de vida.",
-      palette:[C("#F4A261","Naranja damasco"),C("#F6C445","Amarillo girasol"),C("#8BC34A","Verde hierba"),C("#4DB6AC","Turquesa cálido"),C("#FF6F59","Coral","lip"),C("#E07A5F","Terracota clara"),C("#D9A066","Camel"),C("#FFF8E7","Marfil","neutral"),C("#E63946","Rojo tomate"),C("#3FA7A0","Aguamarina"),C("#A9BA5A","Verde oliva claro"),C("#D4AF37","Oro","metal")],
-      stars:["#FF6F59","#4DB6AC","#F6C445","#8BC34A","#F4A261"],
+      palette:[C("#F4A261","Naranja damasco"),C("#F6C445","Amarillo girasol"),C("#8BC34A","Verde hierba"),C("#4DB6AC","Turquesa cálido"),C("#FF6F59","Coral","lip"),C("#E07A5F","Terracota clara"),C("#D9A066","Camel"),C("#FFF8E7","Marfil","neutral"),C("#E63946","Rojo tomate","accent"),C("#3FA7A0","Aguamarina"),C("#A9BA5A","Verde oliva claro"),C("#D4AF37","Oro","metal")],
+      stars:["#F4A261","#D9A066","#A9BA5A","#3FA7A0","#E07A5F"],
       denim:{h:"#4A7FA5", n:"Denim azul cálido, lavado medio"},
+      baseSet:[{h:"#FFF8E7",n:"Marfil"},{h:"#D9A066",n:"Camel"},{h:"#D4AF37",n:"Oro"}],
+      accentSet:[{h:"#E63946",n:"Rojo tomate"},{h:"#FF6F59",n:"Coral"},{h:"#4DB6AC",n:"Turquesa cálido"}],
       avoid:[C("#000000","Negro puro"),C("#C2185B","Fucsia frío"),C("#78909C","Gris azulado")] },
 
     "primavera-brillante": { family:"primavera", famColor:"#b8590c", name:"Primavera Brillante", meta:"Cálida y clara — pero sobre todo, imposible de ignorar.",
       metaphor:"Eres como fuegos artificiales en verano: viva, nítida, con mucha chispa.",
-      palette:[C("#FF7A29","Naranja mandarina"),C("#FFE900","Amarillo limón"),C("#00C776","Esmeralda claro"),C("#00BFC1","Turquesa vibrante"),C("#FF3D7F","Fucsia cálido","lip"),C("#E8112D","Rojo cereza"),C("#2C9EE8","Azul eléctrico"),C("#8E4FDB","Violeta cálido"),C("#FFFFFF","Blanco puro","neutral"),C("#DDA43C","Camel dorado"),C("#B4D400","Verde lima"),C("#F0C419","Oro brillante","metal")],
-      stars:["#FF7A29","#00BFC1","#FF3D7F","#FFE900","#00C776"],
+      palette:[C("#FF7A29","Naranja mandarina"),C("#FFE900","Amarillo limón"),C("#00C776","Esmeralda claro"),C("#00BFC1","Turquesa vibrante"),C("#FF3D7F","Fucsia cálido","lip"),C("#E8112D","Rojo cereza","accent"),C("#2C9EE8","Azul eléctrico"),C("#8E4FDB","Violeta cálido"),C("#FFFFFF","Blanco puro","neutral"),C("#DDA43C","Camel dorado"),C("#B4D400","Verde lima"),C("#F0C419","Oro brillante","metal")],
+      stars:["#FF7A29","#00BFC1","#DDA43C","#F0C419","#2C9EE8"],
       denim:{h:"#4A7FA5", n:"Denim azul brillante, sin desgaste"},
+      baseSet:[{h:"#FFFFFF",n:"Blanco puro"},{h:"#DDA43C",n:"Camel dorado"},{h:"#F0C419",n:"Oro brillante"}],
+      accentSet:[{h:"#E8112D",n:"Rojo cereza"},{h:"#FF3D7F",n:"Fucsia cálido"},{h:"#2C9EE8",n:"Azul eléctrico"}],
       avoid:[C("#7A5C46","Marrón apagado"),C("#C9B79C","Beige polvoso"),C("#E8DDD3","Pastel deslavado")] },
 
     "verano-claro": { family:"verano", famColor:"#3e6e7a", name:"Verano Claro", meta:"La más luminosa de las estaciones frías.",
       metaphor:"Eres como la neblina suave de una mañana de playa: fresca y delicada.",
-      palette:[C("#E8B4C0","Rosa empolvado"),C("#C8B6E2","Lavanda"),C("#A9C6E8","Azul hielo"),C("#B7CFC0","Verde salvia claro"),C("#D6D2D0","Gris perla"),C("#A7D8E8","Celeste"),C("#E6C6CB","Rosa palo","lip"),C("#B4CDE6","Azul pastel"),C("#C9A9C4","Malva"),C("#F5F3F0","Blanco perla","neutral"),C("#B8DFCF","Menta suave"),C("#C7CDD1","Plata","metal")],
+      palette:[C("#E8B4C0","Rosa empolvado"),C("#C8B6E2","Lavanda","accent"),C("#A9C6E8","Azul hielo"),C("#B7CFC0","Verde salvia claro"),C("#D6D2D0","Gris perla"),C("#A7D8E8","Celeste"),C("#E6C6CB","Rosa palo","lip"),C("#B4CDE6","Azul pastel"),C("#C9A9C4","Malva"),C("#F5F3F0","Blanco perla","neutral"),C("#B8DFCF","Menta suave"),C("#C7CDD1","Plata","metal")],
       stars:["#C8B6E2","#A9C6E8","#E8B4C0","#A7D8E8","#B8DFCF"],
       denim:{h:"#5C7A99", n:"Denim azul frío, lavado clásico"},
+      baseSet:[{h:"#F5F3F0",n:"Blanco perla"},{h:"#D6D2D0",n:"Gris perla"},{h:"#C7CDD1",n:"Plata"}],
+      accentSet:[{h:"#C8B6E2",n:"Lavanda"},{h:"#E6C6CB",n:"Rosa palo"},{h:"#C9A9C4",n:"Malva"}],
       avoid:[C("#E8590C","Naranja intenso"),C("#000000","Negro puro"),C("#C9A227","Mostaza")] },
 
     "verano-frio": { family:"verano", famColor:"#3e6e7a", name:"Verano Frío", meta:"El corazón de la familia verano: fría y serena.",
       metaphor:"Eres el azul del mar en un día nublado: fresca, calmada, elegante.",
-      palette:[C("#6D8CA6","Azul acero"),C("#9C8FB0","Lavanda grisácea"),C("#D98CA6","Rosa frío"),C("#7FA391","Verde grisáceo"),C("#8E5B7A","Ciruela","lip"),C("#3F5C73","Azul marino suave"),C("#8D9AA5","Gris azulado"),C("#F0F1F3","Blanco frío","neutral"),C("#B0507A","Fucsia apagado"),C("#6B4A63","Berenjena"),C("#8FB1C7","Azul cielo grisáceo"),C("#B7BEC4","Plata","metal")],
-      stars:["#6D8CA6","#8E5B7A","#D98CA6","#9C8FB0","#3F5C73"],
+      palette:[C("#6D8CA6","Azul acero"),C("#9C8FB0","Lavanda grisácea"),C("#D98CA6","Rosa frío"),C("#7FA391","Verde grisáceo"),C("#8E5B7A","Ciruela","lip"),C("#3F5C73","Azul marino suave"),C("#8D9AA5","Gris azulado"),C("#F0F1F3","Blanco frío","neutral"),C("#B0507A","Fucsia apagado","accent"),C("#6B4A63","Berenjena"),C("#8FB1C7","Azul cielo grisáceo"),C("#B7BEC4","Plata","metal")],
+      stars:["#6D8CA6","#9C8FB0","#8FB1C7","#7FA391","#8D9AA5"],
       denim:{h:"#5C7A99", n:"Denim azul frío, lavado clásico"},
+      baseSet:[{h:"#F0F1F3",n:"Blanco frío"},{h:"#8D9AA5",n:"Gris azulado"},{h:"#B7BEC4",n:"Plata"}],
+      accentSet:[{h:"#B0507A",n:"Fucsia apagado"},{h:"#8E5B7A",n:"Ciruela"},{h:"#6B4A63",n:"Berenjena"}],
       avoid:[C("#E8590C","Naranja"),C("#D4AF37","Dorado brillante"),C("#F6C445","Amarillo cálido")] },
 
     "verano-suave": { family:"verano", famColor:"#3e6e7a", name:"Verano Suave", meta:"Fría y apagada — nunca grita, siempre susurra.",
       metaphor:"Eres colores de acuarela: suaves, mezclados, nunca estridentes.",
-      palette:[C("#C79FA0","Rosa malva"),C("#94A88F","Verde eucalipto"),C("#8FA0AD","Azul humo"),C("#9C7E8A","Ciruela suave","lip"),C("#ABA39A","Gris cálido"),C("#B98A76","Terracota apagada"),C("#A99BB0","Lavanda polvo"),C("#D9C3B8","Beige rosado","neutral"),C("#8E9678","Verde oliva grisáceo"),C("#7E93A0","Azul grisáceo"),C("#8A4F5A","Vino apagado"),C("#B0AAA2","Plata mate","metal")],
+      palette:[C("#C79FA0","Rosa malva"),C("#94A88F","Verde eucalipto"),C("#8FA0AD","Azul humo"),C("#9C7E8A","Ciruela suave","lip"),C("#ABA39A","Gris cálido"),C("#B98A76","Terracota apagada"),C("#A99BB0","Lavanda polvo"),C("#D9C3B8","Beige rosado","neutral"),C("#8E9678","Verde oliva grisáceo"),C("#7E93A0","Azul grisáceo"),C("#8A4F5A","Vino apagado","accent"),C("#B0AAA2","Plata mate","metal")],
       stars:["#94A88F","#9C7E8A","#8FA0AD","#C79FA0","#8A4F5A"],
       denim:{h:"#7488a0", n:"Denim gris-azulado, lavado suave"},
+      baseSet:[{h:"#D9C3B8",n:"Beige rosado"},{h:"#ABA39A",n:"Gris cálido"},{h:"#B0AAA2",n:"Plata mate"}],
+      accentSet:[{h:"#8A4F5A",n:"Vino apagado"},{h:"#9C7E8A",n:"Ciruela suave"},{h:"#A99BB0",n:"Lavanda polvo"}],
       avoid:[C("#000000","Negro puro"),C("#FF7A29","Naranja brillante"),C("#FFFFFF","Blanco puro")] },
 
     "otono-suave": { family:"otono", famColor:"#8a4014", name:"Otoño Suave", meta:"Cálida y apagada — la más discreta de las cálidas.",
       metaphor:"Eres un bosque en octubre: cálido, terroso, nunca estridente.",
-      palette:[C("#9CAF88","Verde salvia"),C("#C9A375","Camel suave"),C("#B25D4C","Terracota apagada","lip"),C("#A99A6B","Caqui"),C("#8A7B6C","Marrón topo"),C("#C9A94A","Mostaza suave"),C("#7D8C55","Verde oliva"),C("#D9C4A3","Beige cálido"),C("#EFE3CC","Crema","neutral"),C("#8A5A5C","Ciruela cálida"),C("#B8935A","Dorado mate","metal"),C("#7C6A4E","Bronce tierra")],
+      palette:[C("#9CAF88","Verde salvia"),C("#C9A375","Camel suave"),C("#B25D4C","Terracota apagada","lip"),C("#A99A6B","Caqui"),C("#8A7B6C","Marrón topo"),C("#C9A94A","Mostaza suave"),C("#7D8C55","Verde oliva"),C("#D9C4A3","Beige cálido"),C("#EFE3CC","Crema","neutral"),C("#8A5A5C","Ciruela cálida","accent"),C("#B8935A","Dorado mate","metal"),C("#7C6A4E","Bronce tierra")],
       stars:["#9CAF88","#B25D4C","#C9A375","#C9A94A","#8A7B6C"],
       denim:{h:"#4a3f34", n:"Denim café oscuro"},
+      baseSet:[{h:"#EFE3CC",n:"Crema"},{h:"#D9C4A3",n:"Beige cálido"},{h:"#B8935A",n:"Dorado mate"}],
+      accentSet:[{h:"#8A5A5C",n:"Ciruela cálida"},{h:"#B25D4C",n:"Terracota apagada"},{h:"#C9A94A",n:"Mostaza suave"}],
       avoid:[C("#000000","Negro puro"),C("#E8117F","Fucsia"),C("#1E5AA8","Azul frío puro")] },
 
     "otono-calido": { family:"otono", famColor:"#8a4014", name:"Otoño Cálido", meta:"El corazón de la familia otoño: cálida y terrosa.",
       metaphor:"Eres el color exacto de las hojas cuando cambian: tierra, fuego y cosecha.",
-      palette:[C("#D2691E","Naranja calabaza"),C("#C99A2E","Mostaza"),C("#556B2F","Verde bosque"),C("#B5522E","Terracota","lip"),C("#6F4E37","Marrón chocolate"),C("#B8860B","Dorado tostado"),C("#A0361F","Rojo ladrillo"),C("#4A5D23","Verde oliva profundo"),C("#C9A671","Beige tostado"),C("#3E7A73","Turquesa apagado"),C("#EFE0C3","Crema hueso","neutral"),C("#8C6239","Bronce","metal")],
-      stars:["#D2691E","#556B2F","#B5522E","#C99A2E","#6F4E37"],
+      palette:[C("#D2691E","Naranja calabaza"),C("#C99A2E","Mostaza"),C("#556B2F","Verde bosque"),C("#B5522E","Terracota","lip"),C("#6F4E37","Marrón chocolate"),C("#B8860B","Dorado tostado"),C("#A0361F","Rojo ladrillo","accent"),C("#4A5D23","Verde oliva profundo"),C("#C9A671","Beige tostado"),C("#3E7A73","Turquesa apagado"),C("#EFE0C3","Crema hueso","neutral"),C("#8C6239","Bronce","metal")],
+      stars:["#6F4E37","#C99A2E","#556B2F","#C9A671","#B8860B"],
       denim:{h:"#4a3f34", n:"Denim café oscuro"},
+      baseSet:[{h:"#EFE0C3",n:"Crema hueso"},{h:"#C9A671",n:"Beige tostado"},{h:"#8C6239",n:"Bronce"}],
+      accentSet:[{h:"#A0361F",n:"Rojo ladrillo"},{h:"#B5522E",n:"Terracota"},{h:"#B8860B",n:"Dorado tostado"}],
       avoid:[C("#E8B4C0","Rosa frío pastel"),C("#FFFFFF","Blanco puro"),C("#A9C6E8","Azul hielo")] },
 
     "otono-profundo": { family:"otono", famColor:"#8a4014", name:"Otoño Profundo", meta:"Cálida e intensa — el último color antes del invierno.",
       metaphor:"Eres el último color antes del invierno: rico, con peso, inolvidable.",
-      palette:[C("#4A3728","Marrón café"),C("#6B1E2B","Vino tinto","lip"),C("#2F4023","Verde bosque oscuro"),C("#B5451B","Naranja quemado"),C("#A67C1E","Mostaza oscura"),C("#4E2A3A","Ciruela oscura"),C("#9C4A2E","Terracota profunda"),C("#3A4520","Verde oliva oscuro"),C("#8A6A1F","Dorado oscuro","metal"),C("#1F1A14","Negro cálido","neutral"),C("#A98F6D","Beige oscuro"),C("#245E58","Turquesa oscuro")],
-      stars:["#6B1E2B","#4A3728","#B5451B","#2F4023","#9C4A2E"],
+      palette:[C("#4A3728","Marrón café"),C("#6B1E2B","Vino tinto","lip"),C("#2F4023","Verde bosque oscuro"),C("#B5451B","Naranja quemado","accent"),C("#A67C1E","Mostaza oscura"),C("#4E2A3A","Ciruela oscura"),C("#9C4A2E","Terracota profunda"),C("#3A4520","Verde oliva oscuro"),C("#8A6A1F","Dorado oscuro","metal"),C("#1F1A14","Negro cálido","neutral"),C("#A98F6D","Beige oscuro"),C("#245E58","Turquesa oscuro")],
+      stars:["#6B1E2B","#4A3728","#2F4023","#9C4A2E","#A98F6D"],
       denim:{h:"#241d18", n:"Denim negro con base café"},
+      baseSet:[{h:"#1F1A14",n:"Negro cálido"},{h:"#A98F6D",n:"Beige oscuro"},{h:"#8A6A1F",n:"Dorado oscuro"}],
+      accentSet:[{h:"#B5451B",n:"Naranja quemado"},{h:"#6B1E2B",n:"Vino tinto"},{h:"#9C4A2E",n:"Terracota profunda"}],
       avoid:[C("#F5D5DC","Pastel rosa"),C("#B7BEC4","Gris plata frío"),C("#FFFFFF","Blanco puro")] },
 
     "invierno-frio": { family:"invierno", famColor:"#35407a", name:"Invierno Frío", meta:"El corazón de la familia invierno: fría y nítida.",
       metaphor:"Eres una noche de estrellas: nítida, contrastada, sin mezcla.",
-      palette:[C("#0B0B0F","Negro azabache","neutral"),C("#FFFFFF","Blanco puro"),C("#1E3A8A","Azul rey"),C("#C2185B","Fucsia frío","lip"),C("#00695C","Esmeralda"),C("#D0021B","Rojo verdadero"),C("#5B21B6","Morado real"),C("#A9C6E8","Azul hielo"),C("#37474F","Gris carbón"),C("#E91E8C","Rosa frío intenso"),C("#00838F","Turquesa frío"),C("#C0C0C0","Plata","metal")],
-      stars:["#0B0B0F","#C2185B","#1E3A8A","#00695C","#FFFFFF"],
+      palette:[C("#0B0B0F","Negro azabache","neutral"),C("#FFFFFF","Blanco puro"),C("#1E3A8A","Azul rey"),C("#C2185B","Fucsia frío","lip"),C("#00695C","Esmeralda"),C("#D0021B","Rojo verdadero","accent"),C("#5B21B6","Morado real"),C("#A9C6E8","Azul hielo"),C("#37474F","Gris carbón"),C("#E91E8C","Rosa frío intenso"),C("#00838F","Turquesa frío"),C("#C0C0C0","Plata","metal")],
+      stars:["#0B0B0F","#1E3A8A","#00695C","#FFFFFF","#37474F"],
       denim:{h:"#0e1a33", n:"Denim negro-azulado intenso"},
+      baseSet:[{h:"#0B0B0F",n:"Negro azabache"},{h:"#37474F",n:"Gris carbón"},{h:"#C0C0C0",n:"Plata"}],
+      accentSet:[{h:"#D0021B",n:"Rojo verdadero"},{h:"#C2185B",n:"Fucsia frío"},{h:"#1E3A8A",n:"Azul rey"}],
       avoid:[C("#E8590C","Naranja"),C("#D9A066","Camel"),C("#C99A2E","Mostaza")] },
 
     "invierno-profundo": { family:"invierno", famColor:"#35407a", name:"Invierno Profundo", meta:"Fría e intensa — la medianoche misma.",
       metaphor:"Eres la medianoche: profunda, dramática, sin disculpas.",
-      palette:[C("#000000","Negro puro","neutral"),C("#4A1030","Vino profundo","lip"),C("#0D1B4C","Azul medianoche"),C("#0B3D2E","Verde botella"),C("#3B0764","Morado oscuro"),C("#7A0C1E","Rojo oscuro"),C("#263238","Gris grafito"),C("#9C1157","Fucsia profundo"),C("#00473E","Esmeralda oscura"),C("#F5F5F5","Blanco frío"),C("#1B2A6B","Azul zafiro"),C("#8A8F94","Plata oscura","metal")],
-      stars:["#4A1030","#0D1B4C","#0B3D2E","#3B0764","#9C1157"],
+      palette:[C("#000000","Negro puro","neutral"),C("#4A1030","Vino profundo","lip"),C("#0D1B4C","Azul medianoche"),C("#0B3D2E","Verde botella"),C("#3B0764","Morado oscuro"),C("#7A0C1E","Rojo oscuro","accent"),C("#263238","Gris grafito"),C("#9C1157","Fucsia profundo"),C("#00473E","Esmeralda oscura"),C("#F5F5F5","Blanco frío"),C("#1B2A6B","Azul zafiro"),C("#8A8F94","Plata oscura","metal")],
+      stars:["#4A1030","#0D1B4C","#0B3D2E","#3B0764","#263238"],
       denim:{h:"#0e1a33", n:"Denim negro-azulado intenso"},
+      baseSet:[{h:"#000000",n:"Negro puro"},{h:"#263238",n:"Gris grafito"},{h:"#8A8F94",n:"Plata oscura"}],
+      accentSet:[{h:"#7A0C1E",n:"Rojo oscuro"},{h:"#4A1030",n:"Vino profundo"},{h:"#1B2A6B",n:"Azul zafiro"}],
       avoid:[C("#FFC4B0","Pastel durazno"),C("#E8C39E","Camel claro"),C("#D9C4A3","Beige")] },
 
     "invierno-brillante": { family:"invierno", famColor:"#35407a", name:"Invierno Brillante", meta:"Fría y clara — un cristal de hielo bajo el sol.",
       metaphor:"Eres un cristal de hielo bajo el sol: fría, pero deslumbrante.",
-      palette:[C("#FFFFFF","Blanco puro","neutral"),C("#0B0B0F","Negro"),C("#FF1493","Fucsia eléctrico","lip"),C("#0047AB","Azul cobalto"),C("#00A86B","Verde esmeralda"),C("#E8112D","Rojo verdadero"),C("#F5F500","Amarillo limón frío"),C("#7B2FF7","Violeta"),C("#00CED1","Turquesa brillante"),C("#FF3CA5","Rosa chicle"),C("#C7CDD1","Plata","metal"),C("#7FDBFF","Azul hielo brillante")],
-      stars:["#FF1493","#0047AB","#00A86B","#00CED1","#7B2FF7"],
+      palette:[C("#FFFFFF","Blanco puro","neutral"),C("#0B0B0F","Negro"),C("#FF1493","Fucsia eléctrico","lip"),C("#0047AB","Azul cobalto"),C("#00A86B","Verde esmeralda"),C("#E8112D","Rojo verdadero","accent"),C("#F5F500","Amarillo limón frío"),C("#7B2FF7","Violeta"),C("#00CED1","Turquesa brillante"),C("#FF3CA5","Rosa chicle"),C("#C7CDD1","Plata","metal"),C("#7FDBFF","Azul hielo brillante")],
+      stars:["#0047AB","#00A86B","#00CED1","#C7CDD1","#7FDBFF"],
       denim:{h:"#0e1a33", n:"Denim negro-azulado, líneas limpias"},
+      baseSet:[{h:"#FFFFFF",n:"Blanco puro"},{h:"#0B0B0F",n:"Negro"},{h:"#C7CDD1",n:"Plata"}],
+      accentSet:[{h:"#E8112D",n:"Rojo verdadero"},{h:"#FF1493",n:"Fucsia eléctrico"},{h:"#0047AB",n:"Azul cobalto"}],
       avoid:[C("#6F4E37","Marrón"),C("#C99A2E","Mostaza"),C("#D9C4A3","Beige")] }
   };
 
@@ -568,6 +613,34 @@
     otono:{ label:"Familia otoño", icon:'<path d="M12 2c3 3 5 6 5 9a5 5 0 0 1-10 0c0-3 2-6 5-9Z"/><path d="M12 13v9"/>' },
     invierno:{ label:"Familia invierno", icon:'<path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11"/>' }
   };
+
+  /* ============ DATA: CELEBRITIES ============ */
+  /* 👉 Estos son nombres reales, comúnmente citados en guías de análisis de color
+     por estación (no es una confirmación oficial de la persona, solo un ejemplo
+     de referencia usado en la industria). Busca una foto para cada uno y pega la
+     URL en "img" — mientras esté vacío, se muestra un círculo con las iniciales
+     del nombre en el color de la estación.
+     Ejemplo: {name:"Nombre Apellido", img:"https://skshop.com.ec/modules/skcourse/views/img/celebs/invierno-brillante-1.jpg"}
+     Puedes agregar, quitar o reemplazar personas libremente. Si el arreglo queda
+     vacío, la sección de celebridades no se muestra para esa estación. */
+  var CELEBS = {
+    "primavera-clara": [ {name:"Taylor Swift", img:""}, {name:"Nicole Kidman", img:""}, {name:"Goldie Hawn", img:""}, {name:"Kim Soo-hyun", img:""} ],
+    "primavera-calida": [ {name:"Blake Lively", img:""}, {name:"Amy Adams", img:""}, {name:"Jessica Chastain", img:""}, {name:"Príncipe Harry", img:""} ],
+    "primavera-brillante": [ {name:"Zac Efron", img:""}, {name:"Damian Lewis", img:""}, {name:"John Boyega", img:""} ],
+    "verano-claro": [ {name:"Daniel Craig", img:""}, {name:"Emily Blunt", img:""}, {name:"Michael Ealy", img:""} ],
+    "verano-frio": [ {name:"Natalie Portman", img:""}, {name:"Kate Middleton", img:""}, {name:"Olivia Wilde", img:""}, {name:"Caitriona Balfe", img:""} ],
+    "verano-suave": [ {name:"Joey King", img:""}, {name:"Jennifer Aniston", img:""}, {name:"Emilia Clarke", img:""}, {name:"Zoe Saldaña", img:""} ],
+    "otono-suave": [ {name:"Kate Winslet", img:""}, {name:"Thandiwe Newton", img:""}, {name:"Elizabeth Olsen", img:""}, {name:"Drew Barrymore", img:""} ],
+    "otono-calido": [ {name:"Lindsay Lohan", img:""}, {name:"Beyoncé", img:""}, {name:"Jennifer Lopez", img:""} ],
+    "otono-profundo": [ {name:"Zendaya", img:""}, {name:"Halle Berry", img:""}, {name:"Javier Bardem", img:""}, {name:"Rami Malek", img:""} ],
+    "invierno-frio": [ {name:"Anne Hathaway", img:""}, {name:"Liv Tyler", img:""}, {name:"Courteney Cox", img:""}, {name:"Lucy Liu", img:""} ],
+    "invierno-profundo": [ {name:"Salma Hayek", img:""}, {name:"Viola Davis", img:""}, {name:"Lupita Nyong'o", img:""} ],
+    "invierno-brillante": [ {name:"Katy Perry", img:""}, {name:"Zooey Deschanel", img:""}, {name:"Benedict Cumberbatch", img:""}, {name:"Lee Byung-hun", img:""} ]
+  };
+
+  function initialsOf(name){
+    return name.trim().split(/\s+/).slice(0,2).map(function(w){ return w.charAt(0).toUpperCase(); }).join("");
+  }
 
   /* ============ BLOOM: generative color composition (no photography) ============ */
   function renderBloom(containerId, colors){
@@ -829,10 +902,12 @@
       return '<div class="swatch-cell" style="background:'+p.h+'"><div class="tip" style="color:'+textOn(p.h)+'">'+p.n+' · '+p.h+'</div></div>';
     }).join("");
 
-    // guide
+    // guide (3 colors per card: base + main garment color + accent, each rotating per category)
     var neutral = s.palette.filter(function(p){return p.role==="neutral";})[0] || s.palette[7];
     var metal = s.palette.filter(function(p){return p.role==="metal";})[0] || s.palette[s.palette.length-1];
     var lip = s.palette.filter(function(p){return p.role==="lip";})[0] || s.palette[0];
+    var baseSet = s.baseSet || [neutral];
+    var accentSetArr = s.accentSet || [neutral];
     var st = s.stars;
     function byHex(h){ return s.palette.filter(function(p){return p.h===h;})[0] || {n:"",h:h}; }
 
@@ -847,14 +922,40 @@
       { cat:"Tu metal", hex:metal.h, name:metal.n, tip:"El metal de tus aretes, cadenas o reloj que mejor combina con tu subtono." },
       { cat:"Tu labial", hex:lip.h, name:lip.n, tip:"El color de labios que más se acerca al tono natural de tus labios y mejillas — nunca falla." }
     ];
-    document.getElementById("guide-grid").innerHTML = guideItems.map(function(g){
-      return '<div class="guide-card"><div class="sw" style="background:'+g.hex+'"></div><div><h4>'+g.cat+'</h4><p class="name-line">'+g.name+'</p><p class="tip">'+g.tip+'</p></div></div>';
+    document.getElementById("guide-grid").innerHTML = guideItems.map(function(g,i){
+      var base = baseSet[i % baseSet.length];
+      var accent = accentSetArr[i % accentSetArr.length];
+      return '<div class="guide-card">'
+        + '<h4>'+g.cat+'</h4>'
+        + '<div class="tri-swatch">'
+          + '<div class="tri-item"><div class="sw" style="background:'+base.h+'"></div><span>Base · '+base.n+'</span></div>'
+          + '<div class="tri-item"><div class="sw" style="background:'+g.hex+'"></div><span>Principal · '+g.name+'</span></div>'
+          + '<div class="tri-item"><div class="sw" style="background:'+accent.h+'"></div><span>Acento · '+accent.n+'</span></div>'
+        + '</div>'
+        + '<p class="tip">'+g.tip+'</p>'
+        + '</div>';
     }).join("");
 
     // avoid
     document.getElementById("avoid-row").innerHTML = s.avoid.map(function(a){
       return '<div class="avoid-chip"><div class="sw" style="background:'+a.h+'"></div><span>'+a.n+'</span></div>';
     }).join("");
+
+    // celebrities (name required; img optional — falls back to an initials avatar)
+    var celebSection = document.getElementById("celeb-section");
+    var celebRow = document.getElementById("celeb-row");
+    celebRow.style.setProperty("--fam-color", s.famColor);
+    var celebList = (CELEBS[seasonId] || []).filter(function(c){ return c && c.name; });
+    if(celebList.length){
+      celebSection.hidden = false;
+      celebRow.innerHTML = celebList.map(function(c){
+        var imgTag = c.img ? '<img class="photo" src="'+c.img+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\'">' : '';
+        return '<div class="celeb-card"><div class="photo-wrap"><div class="photo placeholder">'+initialsOf(c.name)+'</div>'+imgTag+'</div><span class="name">'+c.name+'</span></div>';
+      }).join("");
+    } else {
+      celebSection.hidden = true;
+      celebRow.innerHTML = "";
+    }
 
     // copy result
     var copyBtn = document.getElementById("copy-btn");
