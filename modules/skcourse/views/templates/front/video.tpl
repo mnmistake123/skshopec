@@ -230,14 +230,13 @@
   .skcourse-bonus .avoid-chip .sw::before{ transform:rotate(-45deg); }
   .skcourse-bonus .avoid-chip span{ font-size:13px; color:var(--text-muted); }
 
-  .skcourse-bonus .celeb-row{ display:flex; gap:16px; flex-wrap:wrap; }
-  .skcourse-bonus .celeb-card{ width:104px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; }
-  .skcourse-bonus .celeb-card .photo-wrap{ position:relative; width:96px; height:96px; }
-  .skcourse-bonus .celeb-card .photo{ position:absolute; inset:0; width:96px; height:96px; border-radius:50%; object-fit:cover; border:2px solid var(--fam-color,var(--line-strong)); background:var(--surface-2); }
-  .skcourse-bonus .celeb-card .photo.placeholder{ display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:600; font-size:26px; color:#fff; background:var(--fam-color,var(--wine)); z-index:0; }
-  .skcourse-bonus .celeb-card img.photo{ z-index:1; }
-  .skcourse-bonus .celeb-card .name{ font-size:11.5px; color:var(--text-muted); line-height:1.3; }
-  .skcourse-bonus #celeb-section[hidden]{ display:none; }
+  .skcourse-bonus .persona-row{ display:flex; gap:18px; flex-wrap:wrap; }
+  .skcourse-bonus .persona-card{ width:120px; }
+  .skcourse-bonus .persona-card .photo-wrap{ position:relative; width:120px; height:120px; }
+  .skcourse-bonus .persona-card .photo{ position:absolute; inset:0; width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid var(--fam-color,var(--line-strong)); background:var(--surface-2); }
+  .skcourse-bonus .persona-card .photo.placeholder{ background:var(--fam-color,var(--wine)); z-index:0; }
+  .skcourse-bonus .persona-card img.photo{ z-index:1; }
+  .skcourse-bonus #persona-section[hidden]{ display:none; }
 
   .skcourse-bonus .why-card{ margin-top:26px; background:var(--bg-alt); border:1px solid var(--line); border-radius:4px; padding:20px 22px; }
   .skcourse-bonus .why-card p{ font-size:13.8px; color:var(--text-muted); line-height:1.65; }
@@ -387,13 +386,13 @@
     </div>
     <div class="avoid-row" id="avoid-row"></div>
 
-    <div id="celeb-section" hidden>
+    <div id="persona-section" hidden>
       <div class="section-head">
-        <div class="kicker">celebridades de tu estación</div>
-        <h2>Rostros que comparten tu paleta</h2>
-        <p>Personas públicas que suelen ubicarse en tu misma familia de color — obsérvalas la próxima vez que busques inspiración de outfit o maquillaje.</p>
+        <div class="kicker">ejemplos visuales</div>
+        <h2>Piel, cabello y ojos en tu estación</h2>
+        <p>Estas imágenes ilustran cómo puede verse tu combinación de subtono, claridad e intensidad — no representan a una persona en particular.</p>
       </div>
-      <div class="celeb-row" id="celeb-row"></div>
+      <div class="persona-row" id="persona-row"></div>
     </div>
 
     <div class="end-row">
@@ -614,33 +613,27 @@
     invierno:{ label:"Familia invierno", icon:'<path d="M12 2v20M4.5 6.5l15 11M19.5 6.5l-15 11"/>' }
   };
 
-  /* ============ DATA: CELEBRITIES ============ */
-  /* 👉 Estos son nombres reales, comúnmente citados en guías de análisis de color
-     por estación (no es una confirmación oficial de la persona, solo un ejemplo
-     de referencia usado en la industria). Busca una foto para cada uno y pega la
-     URL en "img" — mientras esté vacío, se muestra un círculo con las iniciales
-     del nombre en el color de la estación.
-     Ejemplo: {name:"Nombre Apellido", img:"https://skshop.com.ec/modules/skcourse/views/img/celebs/invierno-brillante-1.jpg"}
-     Puedes agregar, quitar o reemplazar personas libremente. Si el arreglo queda
-     vacío, la sección de celebridades no se muestra para esa estación. */
-  var CELEBS = {
-    "primavera-clara": [ {name:"Taylor Swift", img:""}, {name:"Nicole Kidman", img:""}, {name:"Goldie Hawn", img:""}, {name:"Kim Soo-hyun", img:""} ],
-    "primavera-calida": [ {name:"Blake Lively", img:""}, {name:"Amy Adams", img:""}, {name:"Jessica Chastain", img:""}, {name:"Príncipe Harry", img:""} ],
-    "primavera-brillante": [ {name:"Zac Efron", img:""}, {name:"Damian Lewis", img:""}, {name:"John Boyega", img:""} ],
-    "verano-claro": [ {name:"Daniel Craig", img:""}, {name:"Emily Blunt", img:""}, {name:"Michael Ealy", img:""} ],
-    "verano-frio": [ {name:"Natalie Portman", img:""}, {name:"Kate Middleton", img:""}, {name:"Olivia Wilde", img:""}, {name:"Caitriona Balfe", img:""} ],
-    "verano-suave": [ {name:"Joey King", img:""}, {name:"Jennifer Aniston", img:""}, {name:"Emilia Clarke", img:""}, {name:"Zoe Saldaña", img:""} ],
-    "otono-suave": [ {name:"Kate Winslet", img:""}, {name:"Thandiwe Newton", img:""}, {name:"Elizabeth Olsen", img:""}, {name:"Drew Barrymore", img:""} ],
-    "otono-calido": [ {name:"Lindsay Lohan", img:""}, {name:"Beyoncé", img:""}, {name:"Jennifer Lopez", img:""} ],
-    "otono-profundo": [ {name:"Zendaya", img:""}, {name:"Halle Berry", img:""}, {name:"Javier Bardem", img:""}, {name:"Rami Malek", img:""} ],
-    "invierno-frio": [ {name:"Anne Hathaway", img:""}, {name:"Liv Tyler", img:""}, {name:"Courteney Cox", img:""}, {name:"Lucy Liu", img:""} ],
-    "invierno-profundo": [ {name:"Salma Hayek", img:""}, {name:"Viola Davis", img:""}, {name:"Lupita Nyong'o", img:""} ],
-    "invierno-brillante": [ {name:"Katy Perry", img:""}, {name:"Zooey Deschanel", img:""}, {name:"Benedict Cumberbatch", img:""}, {name:"Lee Byung-hun", img:""} ]
+  /* ============ DATA: REFERENCE PHOTOS PER SEASON ============ */
+  /* 👉 Cada estación lista los nombres de archivo (sin extensión) que ya subiste
+     a https://landing-sk-images.b-cdn.net/season-personas/<archivo>.jpg
+     Para agregar, quitar o reemplazar una foto, solo edita el arreglo de esa
+     estación. Si el arreglo queda vacío, la sección de ejemplos no se muestra
+     para esa estación (por ejemplo invierno-frio, que todavía no tiene fotos). */
+  var CDN_BASE = "https://landing-sk-images.b-cdn.net/season-personas/";
+  var SEASON_PHOTOS = {
+    "primavera-clara": ["primavera-clara-1", "primavera-clara-2", "primavera-clara-3"],
+    "primavera-calida": ["primavera-calida-1", "primavera-calida-2", "primavera-calida-3"],
+    "primavera-brillante": ["primavera-brillante-1", "primavera-brillante-2", "primavera-brillante-3"],
+    "verano-claro": ["verano-claro-1", "verano-claro-2", "verano-claro-3"],
+    "verano-frio": ["verano-frio-1", "verano-frio-2", "verano-frio-3"],
+    "verano-suave": ["verano-suave-1", "verano-suave-2", "verano-suave-3"],
+    "otono-suave": ["otono-suave-1", "otono-suave-2", "otono-suave-3"],
+    "otono-calido": ["otono-calido-1", "otono-calido-2", "otono-calido-3"],
+    "otono-profundo": ["otono-profundo-1", "otono-profundo-2", "otono-profundo-3"],
+    "invierno-frio": ["invierno-frio-1", "invierno-frio-2", "invierno-frio-3"],
+    "invierno-profundo": ["invierno-profundo-1", "invierno-profundo-2", "invierno-profundo-3"],
+    "invierno-brillante": ["invierno-brillante-1", "invierno-brillante-2", "invierno-brillante-3"]
   };
-
-  function initialsOf(name){
-    return name.trim().split(/\s+/).slice(0,2).map(function(w){ return w.charAt(0).toUpperCase(); }).join("");
-  }
 
   /* ============ BLOOM: generative color composition (no photography) ============ */
   function renderBloom(containerId, colors){
@@ -941,20 +934,20 @@
       return '<div class="avoid-chip"><div class="sw" style="background:'+a.h+'"></div><span>'+a.n+'</span></div>';
     }).join("");
 
-    // celebrities (name required; img optional — falls back to an initials avatar)
-    var celebSection = document.getElementById("celeb-section");
-    var celebRow = document.getElementById("celeb-row");
-    celebRow.style.setProperty("--fam-color", s.famColor);
-    var celebList = (CELEBS[seasonId] || []).filter(function(c){ return c && c.name; });
-    if(celebList.length){
-      celebSection.hidden = false;
-      celebRow.innerHTML = celebList.map(function(c){
-        var imgTag = c.img ? '<img class="photo" src="'+c.img+'" alt="'+c.name+'" loading="lazy" onerror="this.style.display=\'none\'">' : '';
-        return '<div class="celeb-card"><div class="photo-wrap"><div class="photo placeholder">'+initialsOf(c.name)+'</div>'+imgTag+'</div><span class="name">'+c.name+'</span></div>';
+    // reference photos (CDN-hosted, no names — falls back to a blank color circle if a URL 404s)
+    var personaSection = document.getElementById("persona-section");
+    var personaRow = document.getElementById("persona-row");
+    personaRow.style.setProperty("--fam-color", s.famColor);
+    var photoList = SEASON_PHOTOS[seasonId] || [];
+    if(photoList.length){
+      personaSection.hidden = false;
+      personaRow.innerHTML = photoList.map(function(fname){
+        var src = CDN_BASE + fname + ".jpg";
+        return '<div class="persona-card"><div class="photo-wrap"><div class="photo placeholder"></div><img class="photo" src="'+src+'" alt="Ejemplo de piel, cabello y ojos para esta estación" loading="lazy" onerror="this.style.display=\'none\'"></div></div>';
       }).join("");
     } else {
-      celebSection.hidden = true;
-      celebRow.innerHTML = "";
+      personaSection.hidden = true;
+      personaRow.innerHTML = "";
     }
 
     // copy result
